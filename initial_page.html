@@ -6,15 +6,94 @@
     <meta name="viewport" content="width=device-width, 
           initial-scale=1.0">
     <title>Tailwind CSS Example</title>
-    <link href=
-"https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+    <link href= "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
           rel="stylesheet">
+    <style>
+        body {
+            background-color: #1d816c;
+            background-image: url("images\9224941.jpg");
+            background-repeat: no-repeat;
+            background-size: cover; 
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .image-container {
+            position: relative;
+            width: 500px; /* Adjust width as needed */
+            margin: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s; /* Smooth zoom effect */
+        }
+
+        .image-container:hover img {
+            transform: scale(1.1); /* Slightly zoom in the image on hover */
+        }
+
+        .text-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            color: white;
+            font-size: 20px;
+            opacity: 0; /* Start hidden */
+            transition: opacity 0.3s; /* Smooth fade effect */
+        }
+
+        .image-container:hover .text-overlay {
+            opacity: 1; /* Show text on hover */
+        }
+    </style>
 </head>
 
 <body>
-    <h1 class="text-3xl font-bold underline text-green-600">
-        Welcome to GeeksforGeeks
+    <h1 style="text-align: center; color: #ff6f20; font-size: 60px; font-family: 'Pacifico', cursive;">
+        Nuggy
     </h1>
+
+    <div class="grid grid-cols-3 gap-4 px-4">      
+
+        <div class="image-container">
+            <img src="images\351476067_1313968779545355_375183237106749092_n.jpg" alt="Image 1" class="w-full h-auto rounded-lg shadow-md">
+            <div class="text-overlay">Baby at the beach</div>
+        </div>
+        <div class="image-container">
+            <img src="images\459427344_562653779442862_5965610156476810193_n.jpg" alt="Image 2" class="w-full h-auto rounded-lg shadow-md">
+            <div class="text-overlay">Coffee anyone?</div>
+        </div>
+        <div class="image-container">
+            <img src="images\461068942_547289591050836_3270618966310197093_n.jpg" alt="Image 3" class="w-full h-auto rounded-lg shadow-md">
+            <div class="text-overlay">Who dat</div>
+        </div>
+        <div class="image-container">
+            <img src="images\459707491_1076863540450493_3207534686115396208_n.jpg" alt="Image 4" class="w-full h-auto rounded-lg shadow-md">
+            <div class="text-overlay">Roadtripppp</div>
+        </div>
+        <div class="image-container">
+            <img src="images\460192886_1983878955415499_7362652919875540159_n.jpg" alt="Image 5" class="w-full h-auto rounded-lg shadow-md">
+            <div class="text-overlay">Camera lover</div>
+        </div>
+        <div class="image-container">
+            <img src="images\460543037_1059607502534591_5600453564951953552_n.jpg" alt="Image 6" class="w-full h-auto rounded-lg shadow-md">
+            <div class="text-overlay">Serious one</div>
+        </div>
+
+    </div>
+
 </body>
 
 </html>
