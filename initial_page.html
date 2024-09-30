@@ -3,26 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, 
-          initial-scale=1.0">
-    <title>Tailwind CSS Example</title>
-    <link href= "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
-          rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NuggetWebsite</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #1d816c;
-            background-image: url("images\9224941.jpg");
+            background-image: url("images/9224941.jpg"); /* Note the forward slash */
             background-repeat: no-repeat;
-            background-size: cover; 
+            background-size: cover;
             background-position: center;
             display: flex;
             flex-direction: column;
-            padding: 20px;
         }
 
         .image-container {
             position: relative;
-            width: 500px; /* Adjust width as needed */
+            width: 100%; /* Full width of its parent container */
             margin: 20px;
             overflow: hidden;
             border-radius: 10px;
@@ -31,11 +28,11 @@
         .image-container img {
             width: 100%;
             height: auto;
-            transition: transform 0.3s; /* Smooth zoom effect */
+            transition: transform 0.3s;
         }
 
         .image-container:hover img {
-            transform: scale(1.1); /* Slightly zoom in the image on hover */
+            transform: scale(1.1);
         }
 
         .text-overlay {
@@ -47,52 +44,58 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            background-color: rgba(0, 0, 0, 0.5);
             color: white;
             font-size: 20px;
-            opacity: 0; /* Start hidden */
-            transition: opacity 0.3s; /* Smooth fade effect */
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .image-container:hover .text-overlay {
-            opacity: 1; /* Show text on hover */
+            opacity: 1;
         }
     </style>
 </head>
 
-<body>
-    <h1 style="text-align: center; color: #ff6f20; font-size: 60px; font-family: 'Pacifico', cursive;">
+<body class="p-4 sm:p-6 lg:p-10">
+    <h1 class="text-center text-[#ff6f20] text-4xl sm:text-5xl lg:text-6xl font-pacifico">
         Nuggy
     </h1>
 
-    <div class="grid grid-cols-3 gap-4 px-4">      
-
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
         <div class="image-container">
-            <img src="images\351476067_1313968779545355_375183237106749092_n.jpg" alt="Image 1" class="w-full h-auto rounded-lg shadow-md">
+            <img src="images/351476067_1313968779545355_375183237106749092_n.jpg" alt="Image 1" class="w-full h-auto rounded-lg shadow-md">
             <div class="text-overlay">Baby at the beach</div>
         </div>
         <div class="image-container">
-            <img src="images\459427344_562653779442862_5965610156476810193_n.jpg" alt="Image 2" class="w-full h-auto rounded-lg shadow-md">
+            <img src="images/459427344_562653779442862_5965610156476810193_n.jpg" alt="Image 2" class="w-full h-auto rounded-lg shadow-md">
             <div class="text-overlay">Coffee anyone?</div>
         </div>
         <div class="image-container">
-            <img src="images\461068942_547289591050836_3270618966310197093_n.jpg" alt="Image 3" class="w-full h-auto rounded-lg shadow-md">
+            <img src="images/461068942_547289591050836_3270618966310197093_n.jpg" alt="Image 3" class="w-full h-auto rounded-lg shadow-md">
             <div class="text-overlay">Who dat</div>
         </div>
         <div class="image-container">
-            <img src="images\459707491_1076863540450493_3207534686115396208_n.jpg" alt="Image 4" class="w-full h-auto rounded-lg shadow-md">
+            <img src="images/459707491_1076863540450493_3207534686115396208_n.jpg" alt="Image 4" class="w-full h-auto rounded-lg shadow-md">
             <div class="text-overlay">Roadtripppp</div>
         </div>
         <div class="image-container">
-            <img src="images\460192886_1983878955415499_7362652919875540159_n.jpg" alt="Image 5" class="w-full h-auto rounded-lg shadow-md">
+            <img src="images/460192886_1983878955415499_7362652919875540159_n.jpg" alt="Image 5" class="w-full h-auto rounded-lg shadow-md">
             <div class="text-overlay">Camera lover</div>
         </div>
         <div class="image-container">
-            <img src="images\460543037_1059607502534591_5600453564951953552_n.jpg" alt="Image 6" class="w-full h-auto rounded-lg shadow-md">
+            <img src="images/460543037_1059607502534591_5600453564951953552_n.jpg" alt="Image 6" class="w-full h-auto rounded-lg shadow-md">
             <div class="text-overlay">Serious one</div>
         </div>
-
     </div>
+
+    <!-- Button to Start the Game -->
+    <button id="startGameButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6"
+        onclick="window.location.href='memoryGame.html'">
+        Start Game
+    </button>
+
+
 
 </body>
 
