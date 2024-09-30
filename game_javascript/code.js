@@ -1,11 +1,7 @@
-<!-- Script to handle game start and card flipping -->
-
 const dogImages = [
 'images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg',
 'images/6.jpg', 'images/7.jpg', 'images/8.jpg', 'images/9.jpg', 'images/10.jpg',
-'images/11.jpg', 'images/12.jpg', 'images/13.jpg', 'images/14.jpg', 'images/15.jpg',
-'images/16.jpg', 'images/17.jpg', 'images/18.jpg', 'images/19.jpg', 'images/20.jpg'
-    ];
+'images/11.jpg', 'images/12.jpg', 'images/13.jpg', 'images/14.jpg', 'images/15.jpg'];
 
 let cardsArray = [...dogImages, ...dogImages]; // Duplicate images to create pairs
 
@@ -36,7 +32,7 @@ function createGameBoard() {
         front.appendChild(img);
 
         const back = document.createElement('div');
-        back.classList.add('back', 'w-full', 'h-32', 'bg-blue-500', 'flex', 'items-center', 'justify-center', 'rounded', 'text-white');
+        back.classList.add('back', 'w-150px', 'h-250px', 'bg-blue-500', 'flex', 'items-center', 'justify-center', 'rounded', 'text-white');
         back.textContent = 'Click Me!';
 
         card.appendChild(front);
@@ -50,13 +46,30 @@ let firstCard, secondCard;
 let hasFlippedCard = false;
 let lockBoard = false;
 
+let timer; // Timer variable
+let timeElapsed = 0; // Time in seconds
+let timerInterval; // Variable to hold the setInterval reference
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeElapsed++;
+        document.getElementById('timer').textContent = `Time: ${timeElapsed} seconds`;
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
+
 function flipCard() {
     if (lockBoard || this === firstCard) return; // Avoid double clicking or more than 2 flips
 
-    this.querySelector('.front').classList.remove('hidden'); // Show image
-    this.querySelector('.back').classList.add('hidden'); // Hide back side
+    this.querySelector('.front img').classList.add('flipped-image');
+    this.querySelector('.front').classList.remove('hidden');
+    this.querySelector('.back').classList.add('hidden');
 
     if (!hasFlippedCard) {
+        startTimer();
         hasFlippedCard = true;
         firstCard = this;
     } else {
@@ -81,7 +94,6 @@ function disableCards() {
 
 function unflipCards() {
     lockBoard = true;
-    console.log("ILY MARKO")
     setTimeout(() => {
         firstCard.querySelector('.front').classList.add('hidden');
         firstCard.querySelector('.back').classList.remove('hidden');
@@ -99,3 +111,4 @@ function resetBoard() {
 document.getElementById('startGameButton').addEventListener('click', function () {
     createGameBoard();
 });
+

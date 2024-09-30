@@ -5,56 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NuggetWebsite</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #1d816c;
-            background-image: url("images/9224941.jpg"); /* Note the forward slash */
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .image-container {
-            position: relative;
-            width: 100%; /* Full width of its parent container */
-            margin: 20px;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: auto;
-            transition: transform 0.3s;
-        }
-
-        .image-container:hover img {
-            transform: scale(1.1);
-        }
-
-        .text-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-size: 20px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .image-container:hover .text-overlay {
-            opacity: 1;
-        }
-    </style>
 </head>
 
 <body class="p-4 sm:p-6 lg:p-10">
@@ -94,8 +46,6 @@
         onclick="window.location.href='memoryGame.html'">
         Start Game
     </button>
-
-
 
 </body>
 

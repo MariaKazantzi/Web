@@ -1,0 +1,72 @@
+.image-container {
+    position: relative;
+    width: 100%; /* Full width of its parent container */
+    margin: 20px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s;
+}
+
+.image-container:hover img {
+    transform: scale(1.1);
+}
+
+.text-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.image-container:hover .text-overlay {
+    opacity: 1;
+}
+
+.front img, .back{
+    width: 150px;
+    height: 200px;
+}
+
+.flipped-image {
+    width: 150px; /* Resized when flipped */
+    height: 200px;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.card {
+    width: 150px; /* Ensure the back of the card takes full width */
+    height: 200px; /* Ensure the back of the card takes full height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f63bd7; /* Background color for the back side */
+    color: white; /* Text color for the back side */
+    border-radius: 0.5rem; /* Rounded corners */
+    transition: all 0.3s ease; /* Smooth transition for size change */
+}
+
+body {
+    background-color: #1d816c;
+    background-image: url("images/9224941.jpg"); /* Note the forward slash */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+}
+
+
