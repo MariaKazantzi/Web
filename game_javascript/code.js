@@ -58,6 +58,9 @@ let timeElapsed = 0; // Time in seconds
 let timerInterval; // Variable to hold the setInterval reference
 let isPaused = false; // Variable to check if the game is paused
 
+let matchedPairs = 0; // Initialize matched pairs counter
+const totalPairs = cardsArray.length / 2; // Total pairs to match
+
 // Get the overlay element
 const overlay = document.getElementById('overlay');
 
@@ -156,7 +159,37 @@ function checkForMatch() {
 function disableCards() {
     firstCard.removeEventListener('click', flipCard);
     secondCard.removeEventListener('click', flipCard);
+
+    // Increment matched pairs counter
+    matchedPairs++;
+
+    // Check for game over
+    if (matchedPairs === totalPairs) {
+        endGame(); // Call the end game function if all pairs are matched
+    }
+
     resetBoard();
+}
+
+function endGame() {
+    // Stop the timer when the game ends
+    stopTimer(); // Stop the timer
+
+    // Show a success message
+    const message = document.createElement('div');
+    message.classList.add('absolute', 'bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'text-center', 'z-10');
+    message.innerHTML = `
+        <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
+        <p>You have matched all the pairs in ${timeElapsed} seconds!</p>
+        <button id="restartButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Restart Game
+        </button>
+    `;
+
+    document.body.appendChild(message);
+
+    // Add event listener to restart the game
+    // document.getElementById('restartButton').addEventListener('click', restartGame); wait
 }
 
 function unflipCards() {
