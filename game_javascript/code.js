@@ -1,7 +1,5 @@
 const dogImages = [
-'images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg',
-'images/6.jpg', 'images/7.jpg', 'images/8.jpg', 'images/9.jpg', 'images/10.jpg',
-'images/11.jpg', 'images/12.jpg', 'images/13.jpg', 'images/14.jpg', 'images/15.jpg'];
+'images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg'];
 
 let cardsArray = [...dogImages, ...dogImages]; // Duplicate images to create pairs
 
@@ -48,7 +46,6 @@ function createGameBoard() {
     });
 }
 
-
 let firstCard, secondCard;
 let hasFlippedCard = false;
 let lockBoard = false;
@@ -79,7 +76,6 @@ function stopTimer() {
     timerInterval = null; // Clear the reference to the timer interval
 }
 
-
 let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
 
 function togglePause() {
@@ -102,8 +98,14 @@ function togglePause() {
         isPaused = true;
         pauseButton.textContent = "Resume";
         stopTimer();  // Stop the timer
+        console.log("Pausing game...");
         overlay.classList.remove('hidden');  // Show the overlay
         lockBoard = true;  // Lock the board to prevent card flipping
+
+        // Hide unmatched cards if they exist
+        if (firstCard && secondCard && !firstCard.classList.contains('matched') && !secondCard.classList.contains('matched')) {
+            unflipCards();
+        }
 
         // Pause any unflipping cards
         pauseTimeouts.forEach((timeout) => {
@@ -129,7 +131,6 @@ function createPausableTimeout(callback, delay) {
     resume();  // Start the timer when the function is called
     return { pause, resume };  // Return pause and resume functions
 }
-
 
 function flipCard() {
     if (lockBoard || this === firstCard || isPaused) return; // Avoid double clicking or more than 2 flips
@@ -157,6 +158,9 @@ function checkForMatch() {
 }
 
 function disableCards() {
+    firstCard.classList.add('matched'); // Add matched class
+    secondCard.classList.add('matched'); // Add matched class
+
     firstCard.removeEventListener('click', flipCard);
     secondCard.removeEventListener('click', flipCard);
 
@@ -175,6 +179,12 @@ function endGame() {
     // Stop the timer when the game ends
     stopTimer(); // Stop the timer
 
+    // Check if the success message already exists
+    const existingMessage = document.querySelector('.absolute');
+    if (existingMessage) {
+        existingMessage.remove(); // Remove any existing message
+    }
+
     // Show a success message
     const message = document.createElement('div');
     message.classList.add('absolute', 'bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'text-center', 'z-10');
@@ -188,24 +198,53 @@ function endGame() {
 
     document.body.appendChild(message);
 
-    // Add event listener to restart the game
-    // document.getElementById('restartButton').addEventListener('click', restartGame); wait
+    // Add event listener to restart the game, ensuring to use `once` to prevent duplicates
+    document.getElementById('restartButton').addEventListener('click', restartGame, { once: true });
+}
+
+function restartGame() {
+    // Remove the success message
+    const message = document.querySelector('.absolute');
+    if (message) message.remove();
+
+    // Reset the matched pairs
+    matchedPairs = 0;
+
+    // Reset time elapsed
+    timeElapsed = 0;
+    clearInterval(timerInterval); // Clear any existing timer intervals
+    timerInterval = null; // Reset timer reference
+    document.getElementById('timer').textContent = `Time: ${timeElapsed} seconds`; // Reset displayed timer
+
+    // Reset pause state
+    isPaused = false; // Ensure the game is not paused
+    document.getElementById('pauseGameButton').textContent = "Pause"; // Set pause button text to "Pause"
+
+    // Reset overlay visibility
+    overlay.classList.add('hidden'); // Ensure overlay is hidden when restarting the game
+
+    // Reset the board lock
+    lockBoard = false; // Unlock the board if needed
+
+    // Create a new game board
+    createGameBoard();
+    
+    document.getElementById('pauseGameButton').classList.remove('hidden'); // Ensure the pause button is visible
 }
 
 function unflipCards() {
     lockBoard = true;
 
-    // Create a timeout for unflipping cards
-    const unflipTimeout = createPausableTimeout(() => {
-        firstCard.querySelector('.front').classList.add('hidden');
-        firstCard.querySelector('.back').classList.remove('hidden');
-        secondCard.querySelector('.front').classList.add('hidden');
-        secondCard.querySelector('.back').classList.remove('hidden');
+    // Hide the unmatched cards after a delay (this can be customized)
+    setTimeout(() => {
+        if (firstCard && secondCard && !firstCard.classList.contains('matched') && !secondCard.classList.contains('matched')) {
+            firstCard.querySelector('.front').classList.add('hidden');
+            firstCard.querySelector('.back').classList.remove('hidden');
+            secondCard.querySelector('.front').classList.add('hidden');
+            secondCard.querySelector('.back').classList.remove('hidden');
+        }
         resetBoard();
-    }, 1000);
-
-    // Add to the pauseTimeouts array to be paused if needed
-    pauseTimeouts.push(unflipTimeout);
+    }, 1000); // Change delay if necessary
 }
 
 function resetBoard() {
