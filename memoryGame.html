@@ -4,24 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Game with Dog Pictures</title>
+    <title>Memory Game with Nuggy</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body class="flex flex-col items-center justify-center h-screen bg-gray-100">
 
-     <!-- Timer Display -->
-     <div id="timer" class="text-lg mb-4">Time: 0 seconds</div>
+    <!-- Timer Display -->
+    <div id="timer" class="text-lg mb-4">Time: 0 seconds</div>
 
     <!-- Button to Start the Game -->
     <button id="startGameButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6">
         Start Game
     </button>
 
+    <button id="pauseGameButton" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-6 hidden">
+        Pause
+    </button>
+
+    <!-- Gray overlay for pause effect -->
+    <div id="overlay" class="hidden absolute inset-0 bg-gray-700 opacity-50"></div>
+
     <!-- Game Board Container -->
     <div id="gameBoard" class="grid grid-cols-10 gap-4"></div>
     <script src="game_javascript/code.js"></script>
+
+
 </body>
 
 </html>
