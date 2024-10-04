@@ -175,37 +175,158 @@ function disableCards() {
     resetBoard();
 }
 
+// Function to check and update high scores
+function updateHighScores(name, timeElapsed) {
+    // Get existing high scores from localStorage, or set an empty array if none exist
+    let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    // Push the new score (name + time) to the list
+    highScores.push({ name: name, time: timeElapsed });
+
+    // Sort scores in ascending order (because lower time is better)
+    highScores.sort((a, b) => a.time - b.time);
+
+    // Keep only the top 3 scores
+    highScores = highScores.slice(0, 3);
+
+    // Save the updated list back to localStorage
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+
+    // Update the high scores table on the page
+    displayHighScores();
+}
+
+// Function to display high scores in the table
+function displayHighScores() {
+    const highScoresTable = document.getElementById('highScoresTable');
+    const tbody = highScoresTable.getElementsByTagName('tbody')[0];
+    tbody.innerHTML = ''; // Clear existing table rows
+
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    if (highScores.length > 0) {
+        // Make the table visible if there are any high scores
+        highScoresTable.classList.remove('hidden');
+    }
+
+    highScores.forEach((score, index) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td class="border px-4 py-2">${index + 1}</td>
+            <td class="border px-4 py-2">${score.name}</td>
+            <td class="border px-4 py-2">${score.time}</td>
+        `;
+    });
+}
+
+let hasSavedScore = false; // Add this flag to track if the score has been saved
+
 function endGame() {
-    // Stop the timer when the game ends
     stopTimer(); // Stop the timer
 
-    // Check if the success message already exists
     const existingMessage = document.querySelector('.absolute');
     if (existingMessage) {
         existingMessage.remove(); // Remove any existing message
     }
 
-    // Show a success message
     const message = document.createElement('div');
     message.classList.add('absolute', 'bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'text-center', 'z-10');
+    message.id = "draggableMessage"; 
+    message.style.position = "fixed";
+    message.style.top = "50%";
+    message.style.left = "50%";
+    message.style.transform = "translate(-50%, -50%)"; 
     message.innerHTML = `
+    <div class="drag-handle" style="cursor: move; background-color: lightgray; padding: 5px; border-radius: 5px; font-weight: bold;">
+        Drag Me
+    </div>
+    <div style="text-align: center; padding: 20px;">
         <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
         <p>You have matched all the pairs in ${timeElapsed} seconds!</p>
-        <button id="restartButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <label for="nameInput" class="block text-gray-700 text-sm font-bold mb-2">Enter your name:</label>
+        <input id="nameInput" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Your Name">
+        <button id="saveScoreButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Score
+        </button>
+        <button id="restartButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
             Restart Game
         </button>
+    </div>
     `;
 
     document.body.appendChild(message);
 
-    // Add event listener to restart the game, ensuring to use `once` to prevent duplicates
-    document.getElementById('restartButton').addEventListener('click', restartGame, { once: true });
+    // Add event listener to save the score
+    document.getElementById('saveScoreButton').addEventListener('click', () => {
+        const name = document.getElementById('nameInput').value;
+
+        // Only allow saving the score if it hasn't been saved already
+        if (!hasSavedScore && name) {
+            updateHighScores(name, timeElapsed); // Save the high score
+            displayHighScores(); // Show the updated high scores table
+            hasSavedScore = true; // Set flag to true to prevent further saves
+        } else if (hasSavedScore) {
+            alert("You have already saved your score!");
+        } else {
+            alert("Please enter a name to save your score.");
+        }
+    });
+
+    // Add event listener to restart the game
+    document.getElementById('restartButton').addEventListener('click', restartGame);
+
+    // Make the message draggable
+    makeDraggable(document.getElementById('draggableMessage'));
 }
+
+function makeDraggable(element) {
+    const dragHandle = element.querySelector('.drag-handle');
+    let offsetX = 0, offsetY = 0, initialX = 0, initialY = 0;
+
+    // Mouse down event to start dragging
+    dragHandle.onmousedown = dragStart;
+
+    function dragStart(e) {
+        e.preventDefault();
+        // Get the initial mouse position
+        initialX = e.clientX;
+        initialY = e.clientY;
+
+        // Attach the event listeners for mousemove and mouseup
+        document.onmousemove = drag;
+        document.onmouseup = dragEnd;
+    }
+
+    function drag(e) {
+        e.preventDefault();
+
+        // Calculate the new cursor position
+        offsetX = initialX - e.clientX;
+        offsetY = initialY - e.clientY;
+        initialX = e.clientX;
+        initialY = e.clientY;
+
+        // Set the new position of the draggable element
+        element.style.top = (element.offsetTop - offsetY) + "px";
+        element.style.left = (element.offsetLeft - offsetX) + "px";
+    }
+
+    function dragEnd() {
+        // Remove the event listeners when dragging ends
+        document.onmousemove = null;
+        document.onmouseup = null;
+    }
+}
+
 
 function restartGame() {
     // Remove the success message
     const message = document.querySelector('.absolute');
     if (message) message.remove();
+
+    // Hide the high scores table
+    const highScoresTable = document.getElementById('highScoresTable');
+    if (highScoresTable) highScoresTable.classList.add('hidden');
 
     // Reset the matched pairs
     matchedPairs = 0;
@@ -226,11 +347,29 @@ function restartGame() {
     // Reset the board lock
     lockBoard = false; // Unlock the board if needed
 
+    // Reset hasSavedScore flag
+    hasSavedScore = false; 
+
     // Create a new game board
     createGameBoard();
+
+    //clearHighScores();
     
     document.getElementById('pauseGameButton').classList.remove('hidden'); // Ensure the pause button is visible
 }
+
+
+function clearHighScores() {
+    // Remove high scores from localStorage
+    localStorage.removeItem('highScores');
+
+    // Clear the displayed high scores table
+    const highScoresTable = document.getElementById('highScoresTable').getElementsByTagName('tbody')[0];
+    highScoresTable.innerHTML = ''; // Clear all table rows
+}
+
+
+
 
 function unflipCards() {
     lockBoard = true;
