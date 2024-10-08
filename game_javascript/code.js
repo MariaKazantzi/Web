@@ -66,7 +66,14 @@ function startTimer() {
     if (!timerInterval) {
         timerInterval = setInterval(() => {
             timeElapsed++;
-            document.getElementById('timer').textContent = `Time: ${timeElapsed} seconds`;
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+
+            // Format minutes and seconds to display as 00:00
+            const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            // Update the displayed time
+            document.getElementById('timer').textContent = `Time: ${formattedTime}`;
         }, 1000);
     }
 }
@@ -224,6 +231,9 @@ let hasSavedScore = false; // Add this flag to track if the score has been saved
 function endGame() {
     stopTimer(); // Stop the timer
 
+    // Hide the pause button when the game ends
+    document.getElementById('pauseGameButton').classList.add('hidden');
+
     const existingMessage = document.querySelector('.absolute');
     if (existingMessage) {
         existingMessage.remove(); // Remove any existing message
@@ -278,6 +288,7 @@ function endGame() {
     // Make the message draggable
     makeDraggable(document.getElementById('draggableMessage'));
 }
+
 
 function makeDraggable(element) {
     const dragHandle = element.querySelector('.drag-handle');
