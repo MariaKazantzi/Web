@@ -261,6 +261,9 @@ function endGame() {
         <button id="restartButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
             Restart Game
         </button>
+        <button id="showScoresButton" class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Show Scores
+        </button>
     </div>
     `;
 
@@ -273,21 +276,35 @@ function endGame() {
         // Only allow saving the score if it hasn't been saved already
         if (!hasSavedScore && name) {
             updateHighScores(name, timeElapsed); // Save the high score
-            displayHighScores(); // Show the updated high scores table
             hasSavedScore = true; // Set flag to true to prevent further saves
         } else if (hasSavedScore) {
             alert("You have already saved your score!");
         } else {
             alert("Please enter a name to save your score.");
         }
+        displayHighScores(); // Show the updated high scores table
     });
 
     // Add event listener to restart the game
     document.getElementById('restartButton').addEventListener('click', restartGame);
 
+    // Add event listener to show the high scores table when "Show Scores" button is clicked
+    document.getElementById('showScoresButton').addEventListener('click', toggleScoreTable);
+
     // Make the message draggable
     makeDraggable(document.getElementById('draggableMessage'));
+
+    // Immediately show the high scores after displaying the message
+    displayHighScores(); // Display the scores table right away
 }
+
+function toggleScoreTable() {
+    const highScoresTable = document.getElementById('highScoresTable');
+    
+    // Toggle the visibility of the high scores table
+    highScoresTable.classList.toggle('hidden');
+}
+
 
 
 function makeDraggable(element) {
