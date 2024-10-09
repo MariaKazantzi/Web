@@ -234,6 +234,17 @@ function endGame() {
     // Hide the pause button when the game ends
     document.getElementById('pauseGameButton').classList.add('hidden');
 
+    // Retrieve high scores from localStorage
+    let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    // Flag to control if we need to ask for the name
+    let shouldAskForName = true;
+
+    // Check if there are already 3 scores and if the current time is worse
+    if (highScores.length === 3 && highScores[2].time <= timeElapsed) {
+        shouldAskForName = false; // Don't ask for the name if the time is worse than the top 3
+    }
+
     const existingMessage = document.querySelector('.absolute');
     if (existingMessage) {
         existingMessage.remove(); // Remove any existing message
@@ -253,11 +264,13 @@ function endGame() {
     <div style="text-align: center; padding: 20px;">
         <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
         <p>You have matched all the pairs in ${timeElapsed} seconds!</p>
+        ${shouldAskForName ? `
         <label for="nameInput" class="block text-gray-700 text-sm font-bold mb-2">Enter your name:</label>
         <input id="nameInput" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Your Name">
         <button id="saveScoreButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Save Score
         </button>
+        ` : ''}
         <button id="restartButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
             Restart Game
         </button>
@@ -269,21 +282,23 @@ function endGame() {
 
     document.body.appendChild(message);
 
-    // Add event listener to save the score
-    document.getElementById('saveScoreButton').addEventListener('click', () => {
-        const name = document.getElementById('nameInput').value;
+    // Only attach the event listener for saving the score if the time is good enough
+    if (shouldAskForName) {
+        document.getElementById('saveScoreButton').addEventListener('click', () => {
+            const name = document.getElementById('nameInput').value;
 
-        // Only allow saving the score if it hasn't been saved already
-        if (!hasSavedScore && name) {
-            updateHighScores(name, timeElapsed); // Save the high score
-            hasSavedScore = true; // Set flag to true to prevent further saves
-        } else if (hasSavedScore) {
-            alert("You have already saved your score!");
-        } else {
-            alert("Please enter a name to save your score.");
-        }
-        displayHighScores(); // Show the updated high scores table
-    });
+            // Only allow saving the score if a name is entered
+            if (!hasSavedScore && name) {
+                updateHighScores(name, timeElapsed); // Save the high score
+                hasSavedScore = true; // Set flag to true to prevent further saves
+            } else if (hasSavedScore) {
+                alert("You have already saved your score!");
+            } else {
+                alert("Please enter a name to save your score.");
+            }
+            displayHighScores(); // Show the updated high scores table
+        });
+    }
 
     // Add event listener to restart the game
     document.getElementById('restartButton').addEventListener('click', restartGame);
@@ -297,6 +312,7 @@ function endGame() {
     // Immediately show the high scores after displaying the message
     displayHighScores(); // Display the scores table right away
 }
+
 
 function toggleScoreTable() {
     const highScoresTable = document.getElementById('highScoresTable');
