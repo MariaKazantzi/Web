@@ -203,18 +203,26 @@ function updateHighScores(name, timeElapsed) {
     displayHighScores();
 }
 
-// Function to display high scores in the table
-function displayHighScores() {
-    const highScoresTable = document.getElementById('highScoresTable');
-    const tbody = highScoresTable.getElementsByTagName('tbody')[0];
+function displayHighScores(container) {
+    const highScoresTable = document.createElement('table'); // Create a new table element
+    highScoresTable.classList.add('highScoresTable', 'border', 'border-collapse', 'mx-auto', 'mt-4'); // Add classes for styling
+
+    // Create table headers
+    highScoresTable.innerHTML = `
+        <thead>
+            <tr>
+                <th class="border px-4 py-2">Rank</th>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Time (seconds)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+
+    const tbody = highScoresTable.querySelector('tbody');
     tbody.innerHTML = ''; // Clear existing table rows
 
     const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-
-    if (highScores.length > 0) {
-        // Make the table visible if there are any high scores
-        highScoresTable.classList.remove('hidden');
-    }
 
     highScores.forEach((score, index) => {
         const row = tbody.insertRow();
@@ -224,6 +232,10 @@ function displayHighScores() {
             <td class="border px-4 py-2">${score.time}</td>
         `;
     });
+
+    container.innerHTML = ''; // Clear existing content
+    container.appendChild(highScoresTable); // Append the new table to the container
+    container.classList.remove('hidden'); // Show the high scores container
 }
 
 let hasSavedScore = false; // Add this flag to track if the score has been saved
@@ -264,7 +276,7 @@ function endGame() {
     <div style="text-align: center; padding: 20px;">
         <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
         <p>You have matched all the pairs in ${timeElapsed} seconds!</p>
-        ${shouldAskForName ? `
+        ${shouldAskForName ? ` 
         <label for="nameInput" class="block text-gray-700 text-sm font-bold mb-2">Enter your name:</label>
         <input id="nameInput" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Your Name">
         <button id="saveScoreButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -274,15 +286,21 @@ function endGame() {
         <button id="restartButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
             Restart Game
         </button>
-        <button id="showScoresButton" class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            Show Scores
-        </button>
     </div>
     `;
 
     document.body.appendChild(message);
 
-    // Only attach the event listener for saving the score if the time is good enough
+    // Create the high scores container and append it to the message
+    const highScoresContainer = document.createElement('div');
+    highScoresContainer.id = 'highScoresContainer';
+    highScoresContainer.classList.add('hidden'); // Initially hidden
+    message.appendChild(highScoresContainer);
+
+    // Immediately show the high scores after displaying the message
+    displayHighScores(highScoresContainer); // Pass the container to display scores
+
+    // Add event listener to save score
     if (shouldAskForName) {
         document.getElementById('saveScoreButton').addEventListener('click', () => {
             const name = document.getElementById('nameInput').value;
@@ -291,36 +309,67 @@ function endGame() {
             if (!hasSavedScore && name) {
                 updateHighScores(name, timeElapsed); // Save the high score
                 hasSavedScore = true; // Set flag to true to prevent further saves
+                displayHighScores(highScoresContainer); // Update displayed scores
             } else if (hasSavedScore) {
                 alert("You have already saved your score!");
             } else {
                 alert("Please enter a name to save your score.");
             }
-            displayHighScores(); // Show the updated high scores table
         });
     }
 
     // Add event listener to restart the game
     document.getElementById('restartButton').addEventListener('click', restartGame);
 
-    // Add event listener to show the high scores table when "Show Scores" button is clicked
-    document.getElementById('showScoresButton').addEventListener('click', toggleScoreTable);
-
     // Make the message draggable
-    makeDraggable(document.getElementById('draggableMessage'));
-
-    // Immediately show the high scores after displaying the message
-    displayHighScores(); // Display the scores table right away
+    makeDraggable(message);
 }
+
+
 
 
 function toggleScoreTable() {
-    const highScoresTable = document.getElementById('highScoresTable');
-    
-    // Toggle the visibility of the high scores table
-    highScoresTable.classList.toggle('hidden');
-}
+    // Check if the high scores message already exists
+    const highScoresMessage = document.getElementById('draggableMessage');
 
+    // Create the high scores table if it doesn't exist
+    if (highScoresMessage) {
+        // Create a container for high scores if not already present
+        let scoresContainer = document.getElementById('highScoresContainer');
+
+        // Create a new container if it doesn't exist
+        if (!scoresContainer) {
+            scoresContainer = document.createElement('div');
+            scoresContainer.id = 'highScoresContainer';
+            scoresContainer.innerHTML = `
+                <h2 class="text-2xl font-bold mb-2">High Scores</h2>
+                <table id="highScoresTable" class="border-collapse w-full mt-4">
+                    <thead>
+                        <tr>
+                            <th class="border px-4 py-2">#</th>
+                            <th class="border px-4 py-2">Name</th>
+                            <th class="border px-4 py-2">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button id="closeHighScoresButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Close
+                </button>
+            `;
+            highScoresMessage.appendChild(scoresContainer);
+            displayHighScores(); // Display high scores in the newly created table
+            
+            // Add event listener to close the high scores message
+            document.getElementById('closeHighScoresButton').addEventListener('click', () => {
+                scoresContainer.classList.add('hidden'); // Hide the scores container
+            });
+        } else {
+            // Toggle visibility of the existing scores container
+            scoresContainer.classList.toggle('hidden');
+        }
+    }
+}
 
 
 function makeDraggable(element) {
