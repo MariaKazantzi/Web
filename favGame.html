@@ -45,10 +45,18 @@
         </tbody>
     </table>
 
+    <!-- Game Container (hidden initially) -->
+    <div id="gameContainer" class="game-container" style="display: none;">
+        <h1>Who Likes Nugget More?</h1>
+        <div class="images-container">
+            <img id="img1" class="choice" src="image1.jpg" alt="Person 1">
+            <img id="img2" class="choice" src="image2.jpg" alt="Person 2">
+        </div>
+        <p id="result"></p>
+    </div>
 
-    <!-- Game Board Container -->
-    <div id="gameBoard" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-4"></div>
-    <script src="game_javascript/favGame.js"></script>
+    <script src="script.js"></script>
+
 
 
 </body>
