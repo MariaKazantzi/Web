@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fav Game with Nuggy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+</head>
+
+<body class="p-4 sm:p-6 lg:p-10 flex flex-col items-center justify-center h-screen bg-gray-100">
+
+    <!-- Timer Display -->
+    <div id="timer" class="text-lg mb-4">Time: 0 seconds</div>
+
+    <!-- Button to Start the Game -->
+    <button id="startGameButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6">
+        Start Game
+    </button>
+
+    <button id="pauseGameButton" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-6 hidden">
+        Pause
+    </button>
+
+    <!-- Gray overlay for pause effect -->
+    <div id="overlay" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-10">
+        <div class="text-white">
+            <h1>Game Paused</h1>
+            <p>Press "Resume" to continue playing.</p>
+        </div>
+    </div>
+
+    <table id="highScoresTable" class="hidden">
+        <thead>
+            <tr>
+                <th class="border px-4 py-2">Rank</th>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Time (seconds)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- High scores will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+
+    <!-- Game Board Container -->
+    <div id="gameBoard" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-4"></div>
+    <script src="game_javascript/favGame.js"></script>
+
+
+</body>
+
+</html>
