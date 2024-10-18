@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +8,11 @@
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
 </head>
-
 <body class="p-4 sm:p-6 lg:p-10 flex flex-col items-center justify-center h-screen bg-gray-100">
-
-    <!-- Timer Display -->
-    <div id="timer" class="text-lg mb-4">Time: 0 seconds</div>
 
     <!-- Button to Start the Game -->
     <button id="startGameButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6">
         Start Game
-    </button>
-
-    <button id="pauseGameButton" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-6 hidden">
-        Pause
     </button>
 
     <!-- Gray overlay for pause effect -->
@@ -46,19 +37,17 @@
     </table>
 
     <!-- Game Container (hidden initially) -->
-    <div id="gameContainer" class="game-container" style="display: none;">
-        <h1>Who Likes Nugget More?</h1>
-        <div class="images-container">
-            <img id="img1" class="choice" src="image1.jpg" alt="Person 1">
-            <img id="img2" class="choice" src="image2.jpg" alt="Person 2">
+    <div id="gameContainer" class="game-container text-center" style="display: none;">
+        <h1>Who is Nugget's favorite?</h1>
+        <div class="images-container flex justify-center">
+            <img id="img1" class="choice w-40 h-40 m-4" src="images/favorites/andreas.jpg" alt="Person 1">
+            <img id="img2" class="choice w-40 h-40 m-4" src="images/favorites/maria.jpg" alt="Person 2">
         </div>
-        <p id="result"></p>
+        <p id="result" class="mt-4 text-lg"></p>
     </div>
 
-    <script src="script.js"></script>
-
-
+    <!-- Move script tag here -->
+    <script src="game_javascript/code_favGame.js"></script>
 
 </body>
-
 </html>
