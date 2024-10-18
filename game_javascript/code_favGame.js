@@ -38,6 +38,7 @@ let currentTurn = 0; // Track the current turn
 let score = 0; // Track the player's score
 let previousPairs = []; // Store shown pairs to prevent repeats
 
+
 console.log("DOM fully loaded and parsed."); // Check if script runs
 
 // Start the game when the button is clicked
@@ -65,6 +66,7 @@ img2.addEventListener('click', function () {
 
 // Compare priorities function
 function comparePriorities(selectedName, otherName) {
+
     const selectedPriority = priorityTable[selectedName];
     const otherPriority = priorityTable[otherName];
 
@@ -85,6 +87,10 @@ function comparePriorities(selectedName, otherName) {
 
 // Load new images function
 function loadNewImages() {
+
+    // Update round display
+    roundDisplay.textContent = `Round: ${currentTurn + 1}/10`; // Update round display
+
     console.log("Loading new images..."); // Debugging statement
     result.textContent = ""; // Clear result text
 
@@ -125,7 +131,8 @@ function capitalize(name) {
 
 // End the game function
 function endGame() {
-    result.textContent = `Game over! Your final score is: ${score}`;
+    result.textContent = `Game over! Your final score is: ${score} points!`;
+    roundDisplay.textContent = ""; // Clear round display
     img1.style.display = 'none'; // Hide images
     img2.style.display = 'none'; // Hide images
 }
