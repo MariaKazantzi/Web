@@ -37,6 +37,7 @@ const imageList = [
 let currentTurn = 0; // Track the current turn
 let score = 0; // Track the player's score
 let previousPairs = []; // Store shown pairs to prevent repeats
+let isClickable = true; // Control when images are clickable
 
 
 console.log("DOM fully loaded and parsed."); // Check if script runs
@@ -49,19 +50,30 @@ startButton.addEventListener('click', function () {
     startButton.style.display = 'none';
     gameContainer.style.display = 'block';
 
+    // Show the round display
+    const roundDisplay = document.getElementById('roundDisplay');
+    roundDisplay.classList.remove('hidden'); // Remove the 'hidden' class to show the round display
+
     // Load initial images
     loadNewImages();
 });
 
 // Function to handle image clicks
+// Function to handle image clicks
 img1.addEventListener('click', function () {
-    console.log("Image 1 clicked!");
-    comparePriorities(img1Data.name, img2Data.name); // Compare priorities
+    if (isClickable) {  // Check if images are clickable
+        console.log("Image 1 clicked!");
+        comparePriorities(img1Data.name, img2Data.name); // Compare priorities
+        isClickable = false;  // Disable further clicks for this round
+    }
 });
 
 img2.addEventListener('click', function () {
-    console.log("Image 2 clicked!");
-    comparePriorities(img2Data.name, img1Data.name); // Compare priorities
+    if (isClickable) {  // Check if images are clickable
+        console.log("Image 2 clicked!");
+        comparePriorities(img2Data.name, img1Data.name); // Compare priorities
+        isClickable = false;  // Disable further clicks for this round
+    }
 });
 
 // Compare priorities function
@@ -87,6 +99,9 @@ function comparePriorities(selectedName, otherName) {
 
 // Load new images function
 function loadNewImages() {
+
+    // Re-enable clicks for the new round
+    isClickable = true;  
 
     // Update round display
     roundDisplay.textContent = `Round: ${currentTurn + 1}/10`; // Update round display
