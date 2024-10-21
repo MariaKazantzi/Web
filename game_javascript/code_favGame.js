@@ -59,7 +59,6 @@ startButton.addEventListener('click', function () {
 });
 
 // Function to handle image clicks
-// Function to handle image clicks
 img1.addEventListener('click', function () {
     if (isClickable) {  // Check if images are clickable
         console.log("Image 1 clicked!");
@@ -88,7 +87,6 @@ function comparePriorities(selectedName, otherName) {
         score++; // Increment score for correct answer
     } else {
         result.textContent = `Wrong!`;
-        score--; // Decrement score for incorrect answer
     }
 
     currentTurn++; // Increment turn count
