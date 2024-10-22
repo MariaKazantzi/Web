@@ -143,6 +143,7 @@ function capitalize(name) {
 }
 
 const restartButton = document.getElementById('restartGameButton');
+const gameTitle = document.getElementById('gameTitle');
 
 // End the game function
 function endGame() {
@@ -150,6 +151,9 @@ function endGame() {
     roundDisplay.textContent = ""; // Clear round display
     img1.style.display = 'none'; // Hide images
     img2.style.display = 'none'; // Hide images
+
+    // Hide the title
+    gameTitle.style.display = 'none';
 
     // Show the Restart button after the game ends
     restartButton.style.display = 'block';
@@ -172,11 +176,13 @@ function restartGame() {
     // Hide the restart button
     restartButton.style.display = 'none';
 
-    // Reset game container visibility and images
+    // Show the title and images again
+    gameTitle.style.display = 'block';
     img1.style.display = 'block';
     img2.style.display = 'block';
 
     // Load the first pair of images for the new game
     loadNewImages();
 }
+
 
