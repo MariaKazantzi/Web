@@ -142,10 +142,41 @@ function capitalize(name) {
     return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
+const restartButton = document.getElementById('restartGameButton');
+
 // End the game function
 function endGame() {
     result.textContent = `Game over! Your final score is: ${score} points!`;
     roundDisplay.textContent = ""; // Clear round display
     img1.style.display = 'none'; // Hide images
     img2.style.display = 'none'; // Hide images
+
+    // Show the Restart button after the game ends
+    restartButton.style.display = 'block';
 }
+
+// Add event listener for the restart button
+restartButton.addEventListener('click', function () {
+    restartGame();
+});
+
+// Function to restart the game
+function restartGame() {
+    console.log("Restarting the game...");
+    
+    // Reset game variables
+    currentTurn = 0;
+    score = 0;
+    previousPairs = [];
+    
+    // Hide the restart button
+    restartButton.style.display = 'none';
+
+    // Reset game container visibility and images
+    img1.style.display = 'block';
+    img2.style.display = 'block';
+
+    // Load the first pair of images for the new game
+    loadNewImages();
+}
+
