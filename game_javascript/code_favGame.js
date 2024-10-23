@@ -92,7 +92,7 @@ function comparePriorities(selectedName, otherName) {
     currentTurn++; // Increment turn count
 
     // Load new images after showing the result
-    setTimeout(loadNewImages, 2000);
+    setTimeout(loadNewImages, 700);
 }
 
 // Load new images function
