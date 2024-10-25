@@ -88,4 +88,21 @@ body {
     flex-direction: column;
 }
 
+#backToStartButton {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease; /* Smooth transition when resizing */
+}
+
+/* Adjust positioning for smaller screens */
+@media (max-width: 640px) {
+    #backToStartButton {
+        top: 0.5rem;
+        left: 0.5rem;
+        padding: 0.3rem 0.8rem;
+    }
+}
+
 

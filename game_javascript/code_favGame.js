@@ -185,4 +185,16 @@ function restartGame() {
     loadNewImages();
 }
 
+// Event listener for the Back to Start button
+document.getElementById('backToStartButton').addEventListener('click', function() {
+    // Redirect to initial.html
+    window.location.href = 'initial_page.html';
+});
+
+// When the game starts, show the Back to Start button
+document.getElementById('startGameButton').addEventListener('click', function() {
+    document.getElementById('backToStartButton').style.display = 'block';
+});
+
+
 
