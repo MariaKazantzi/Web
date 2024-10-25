@@ -1,3 +1,9 @@
+/* general style */
+
+body {
+    font-family: 'Bangers', cursive;
+}
+
 .image-container {
     position: relative;
     width: 100%; /* Full width of its parent container */
@@ -16,8 +22,20 @@
     transform: scale(1.1);
 }
 
+.image-container:hover .text-overlay {
+    opacity: 1;
+}
+
+
+/* memory game style */
+
 body {
-    font-family: 'Bangers', cursive;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #F3F4F6; /* Light gray background */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
 }
 
 .text-overlay {
@@ -36,56 +54,19 @@ body {
     transition: opacity 0.3s;
 }
 
-.image-container:hover .text-overlay {
-    opacity: 1;
-}
-
-.front img, .back{
-    width: 150px;
-    height: 200px;
-}
-
-.flipped-image {
-    width: 150px; /* Resized when flipped */
-    height: 200px;
-    transition: width 0.3s ease, height 0.3s ease;
-}
-
-.card {
-    width: 150px; /* Ensure the back of the card takes full width */
-    height: 200px; /* Ensure the back of the card takes full height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f63bd7; /* Background color for the back side */
-    color: white; /* Text color for the back side */
-    border-radius: 0.5rem; /* Rounded corners */
-    transition: all 0.3s ease; /* Smooth transition for size change */
-}
-
-#overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent gray */
-    z-index: 10; /* Ensure it covers the game board */
+#gameBoard {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10vw, 1fr)); /* Responsive column sizing */
+    gap: 10px; /* Space between cards */
+    width: 100%; /* Full width of the screen */
+    max-width: 100vw; /* Ensure it does not exceed viewport width */
+    padding: 10px; /* Optional padding for better appearance */
+    margin: 0; /* Remove default margin */
 }
 
 #pauseGameButton {
     z-index: 1001; /* Ensure it is above the overlay */
     pointer-events: auto; /* Allow interaction with the button */
-}
-
-body {
-    background-color: #1d816c;
-    background-image: url("images/9224941.jpg"); /* Note the forward slash */
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
 }
 
 #backToStartButton {
@@ -104,5 +85,63 @@ body {
         padding: 0.3rem 0.8rem;
     }
 }
+
+/* Style for the card */
+.card {
+    background-color: #E0E0E0; /* Light gray for cards */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Prevent overflow */
+    aspect-ratio: 1 / 1; /* Square cards */
+}
+
+.front, .back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Full height */
+}
+
+.front img {
+    max-width: 150px;
+    max-height: 200px;
+    object-fit: cover; /* Ensure images cover the card */
+}
+
+/* fav game style */
+
+
+
+
+
+
+
+
+/* working on it */
+
+body {
+    background-color: #1d816c;
+    background-image: url("images/9224941.jpg"); /* Note the forward slash */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
