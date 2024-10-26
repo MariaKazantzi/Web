@@ -1,6 +1,8 @@
 const dogImages = [
 'images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg'];
 
+const cardCount = dogImages.length;
+
 let cardsArray = [...dogImages, ...dogImages]; // Duplicate images to create pairs
 
 function shuffle(array) {
@@ -325,9 +327,6 @@ function endGame() {
     makeDraggable(message);
 }
 
-
-
-
 function toggleScoreTable() {
     // Check if the high scores message already exists
     const highScoresMessage = document.getElementById('draggableMessage');
@@ -371,7 +370,6 @@ function toggleScoreTable() {
     }
 }
 
-
 function makeDraggable(element) {
     const dragHandle = element.querySelector('.drag-handle');
     let offsetX = 0, offsetY = 0, initialX = 0, initialY = 0;
@@ -410,7 +408,6 @@ function makeDraggable(element) {
         document.onmouseup = null;
     }
 }
-
 
 function restartGame() {
     // Remove the success message
@@ -451,7 +448,6 @@ function restartGame() {
     document.getElementById('pauseGameButton').classList.remove('hidden'); // Ensure the pause button is visible
 }
 
-
 function clearHighScores() {
     // Remove high scores from localStorage
     localStorage.removeItem('highScores');
@@ -460,9 +456,6 @@ function clearHighScores() {
     const highScoresTable = document.getElementById('highScoresTable').getElementsByTagName('tbody')[0];
     highScoresTable.innerHTML = ''; // Clear all table rows
 }
-
-
-
 
 function unflipCards() {
     lockBoard = true;
@@ -504,3 +497,19 @@ document.getElementById('backToStartButton').addEventListener('click', function(
 document.getElementById('startGameButton').addEventListener('click', function() {
     document.getElementById('backToStartButton').style.display = 'block';
 });
+
+// Function to dynamically set the grid layout
+function setGridLayout(cardCount) {
+    const gameBoard = document.getElementById("gameBoard");
+
+    // Calculate optimal rows and columns based on card count
+    const columns = Math.ceil(Math.sqrt(cardCount));
+    const rows = Math.ceil(cardCount / columns);
+
+    // Update CSS grid style dynamically
+    gameBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+    gameBoard.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+}
+
+// Example usage: adjust layout for 16 cards
+setGridLayout(16); // Call this with the number of cards
