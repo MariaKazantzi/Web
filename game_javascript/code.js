@@ -499,17 +499,44 @@ document.getElementById('startGameButton').addEventListener('click', function() 
 });
 
 // Function to dynamically set the grid layout
-function setGridLayout(cardCount) {
+function setGridLayout(cur_cardCount) {
     const gameBoard = document.getElementById("gameBoard");
 
-    // Calculate optimal rows and columns based on card count
-    const columns = Math.ceil(Math.sqrt(cardCount));
-    const rows = Math.ceil(cardCount / columns);
+    // Determine the optimal number of columns based on screen size
+    let columns;
 
-    // Update CSS grid style dynamically
+    // Calculate number of columns based on card count and viewport width
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth >= 1024) { // Large screens
+        columns = Math.min(10, cur_cardCount); // Max 10 columns
+    } else if (screenWidth >= 768) { // Medium screens
+        columns = Math.min(6, cur_cardCount); // Max 6 columns
+    } else if (screenWidth >= 640) { // Small screens
+        columns = Math.min(4, cur_cardCount); // Max 4 columns
+    } else { // Extra small screens
+        columns = Math.min(2, cur_cardCount); // Max 2 columns
+    }
+
+    // Calculate rows based on the card count
+    const rows = Math.ceil(cur_cardCount / columns);
+
+    // Set the CSS grid styles based on the calculated rows and columns
     gameBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
     gameBoard.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
 }
 
+// Call this function when the page loads and also when the window is resized
+window.onload = () => {
+    const cardCount = 10; // Set this based on your actual card count
+    setGridLayout(cardCount);
+};
+
+window.onresize = () => {
+    const cardCount = 10; // Set this based on your actual card count
+    setGridLayout(cardCount);
+};
+
+
 // Example usage: adjust layout for 16 cards
-setGridLayout(16); // Call this with the number of cards
+setGridLayout(cardCount*2); // Call this with the number of cards
