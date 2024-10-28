@@ -106,11 +106,24 @@ body {
 
 /* fav game style */
 
+#img1 {
+    width: 200px; /* Fixed width */
+    height: auto; /* Auto height to maintain aspect ratio */
+    object-fit: contain;
+}
+
+#img2 {
+    width: 150px; /* Fixed width */
+    height: auto; /* Auto height to maintain aspect ratio */
+    object-fit: contain;
+}
 
 
-
-
-
+.images-container {
+    display: flex;
+    justify-content: center; /* Center the images horizontally */
+    gap: 1rem; /* Add spacing between images */
+}
 
 
 /* working on it */

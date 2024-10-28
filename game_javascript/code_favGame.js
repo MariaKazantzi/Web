@@ -10,8 +10,8 @@ const priorityTable = {
     'claire': 9,
     'andreas': 8,
     'anastasia': 7,
-    'marko': 6,
-    'rea': 5,
+    'rea': 6,
+    'marko': 5,
     'maria': 4,
     'george': 3,
     'pappous': 2,
@@ -31,7 +31,8 @@ const imageList = [
     { name: 'giagia', src: 'images/favorites/giagia.jpg' },
     { name: 'pappous', src: 'images/favorites/pappous.jpg' },
     { name: 'anastasia', src: 'images/favorites/anastasia.jpg' },
-    { name: 'marko', src: 'images/favorites/marko.jpg' }
+    { name: 'marko', src: 'images/favorites/marko.jpg' },
+    { name: 'rea', src: 'images/favorites/rea.jpg' }
 ];
 
 let currentTurn = 0; // Track the current turn
