@@ -58,8 +58,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive column sizing */
     gap: 10px; /* Space between cards */
-    width: 100%; /* Full width of the screen */
-    max-width: 100vw; /* Ensure it does not exceed viewport width */
+    max-width: 80vw; /* Center the board and add fixed side padding */
     padding: 10px; /* Optional padding for better appearance */
     margin: 0; /* Remove default margin */
 }

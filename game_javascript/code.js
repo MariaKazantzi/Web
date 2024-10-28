@@ -518,8 +518,9 @@ function setGridLayout(cur_cardCount) {
         columns = Math.min(2, cur_cardCount); // Max 2 columns
     }
 
-    // Calculate rows based on the card count
-    const rows = Math.ceil(cur_cardCount / columns);
+    // Calculate rows based on the card count and ensure even number of rows
+    let rows = Math.ceil(cur_cardCount / columns);
+    if (rows % 2 !== 0) rows += 1; // Ensure even row count
 
     // Set the CSS grid styles based on the calculated rows and columns
     gameBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
@@ -528,15 +529,12 @@ function setGridLayout(cur_cardCount) {
 
 // Call this function when the page loads and also when the window is resized
 window.onload = () => {
-    const cardCount = 10; // Set this based on your actual card count
     setGridLayout(cardCount);
 };
 
 window.onresize = () => {
-    const cardCount = 10; // Set this based on your actual card count
     setGridLayout(cardCount);
 };
 
-
-// Example usage: adjust layout for 16 cards
-setGridLayout(cardCount*2); // Call this with the number of cards
+// Example usage: adjust layout
+setGridLayout(cardCount); // Call this with the number of cards
