@@ -1,6 +1,13 @@
 /* general style */
 
 body {
+    background-color: #1d816c;
+    background-image: url("images/9224941.jpg"); /* Note the forward slash */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
     font-family: 'Bangers', cursive;
 }
 
@@ -33,7 +40,6 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #F3F4F6; /* Light gray background */
     display: flex; /* Use flexbox for centering */
     justify-content: center; /* Center horizontally */
 }
@@ -103,7 +109,6 @@ body {
 }
 
 
-
 /* fav game style */
 
 #img1 {
@@ -124,21 +129,6 @@ body {
     justify-content: center; /* Center the images horizontally */
     gap: 1rem; /* Add spacing between images */
 }
-
-
-/* working on it */
-
-body {
-    background-color: #1d816c;
-    background-image: url("images/9224941.jpg"); /* Note the forward slash */
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-}
-
-
 
 
 
