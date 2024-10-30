@@ -1,3 +1,7 @@
+const dogImages = ['images/11.jpg', 'images/12.jpg', 'images/13.jpg', 'images/14.jpg', 'images/15.jpg','images/16.jpg', 'images/17.jpg', 'images/18.jpg', 'images/19.jpg', 'images/20.jpg'];
+
+const randomImage = dogImages[Math.floor(Math.random() * dogImages.length)];
+
 // JavaScript array to hold shuffled positions
 let puzzlePieces = [...Array(16).keys()]; // For a 4x4 grid
 puzzlePieces = puzzlePieces.sort(() => Math.random() - 0.5);
@@ -9,7 +13,7 @@ puzzlePieces.forEach((piece) => {
     pieceDiv.classList.add("puzzle-piece");
 
     // Set up the background image and position
-    pieceDiv.style.backgroundImage = "url('images/11.jpg')";
+    pieceDiv.style.backgroundImage =  `url('${randomImage}')`;
     pieceDiv.style.backgroundPosition = `${-(piece % 4) * 100}px ${-Math.floor(piece / 4) * 100}px`;
 
     pieceDiv.dataset.index = piece; // Store the original index
