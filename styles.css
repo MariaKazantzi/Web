@@ -130,6 +130,28 @@ body {
     gap: 1rem; /* Add spacing between images */
 }
 
+/* puzzle game style */
+
+#puzzle-container {
+    width: 400px; /* Set the container's width based on your image */
+    height: 400px; /* Set the container's height based on your image */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for a 4x4 grid */
+    grid-template-rows: repeat(4, 1fr); /* 4 rows for a 4x4 grid */
+    gap: 2px; /* Space between pieces */
+}
+
+.puzzle-piece {
+    width: 100px; /* Each piece is 1/4th of 400px */
+    height: 100px;
+    background-size: 400px 400px; /* Keeps the full image size consistent */
+    cursor: pointer;
+    border: 1px solid #ddd; /* Optional styling for visual separation */
+}
+
+
+
+
 
 
 
