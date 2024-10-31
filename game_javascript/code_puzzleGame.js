@@ -98,13 +98,10 @@ let isPaused = false; // Variable to check if the game is paused
 let isTimerStarted = false; // Flag to check if the timer has started
 
 function startTimer() {
-    if (!timerInterval) { // Only start if no timer is already running
+    if (!timerInterval) { // Start the timer only if it's not already running
         timerInterval = setInterval(() => {
             timeElapsed++;
-            const minutes = Math.floor(timeElapsed / 60);
-            const seconds = timeElapsed % 60;
-            const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            document.getElementById('timer').textContent = `Time: ${formattedTime}`;
+            updateTimerDisplay();
         }, 1000);
     }
 }
@@ -114,23 +111,28 @@ function stopTimer() {
     timerInterval = null;
 }
 
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeElapsed / 60);
+    const seconds = timeElapsed % 60;
+    const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    document.getElementById('timer').textContent = `Time: ${formattedTime}`;
+}
 
+
+// Toggle Pause and Resume function
 function togglePause() {
     const pauseButton = document.getElementById('pauseGameButton');
-
-    if (isPaused) { // If currently paused, resume the game
+    
+    if (isPaused) {
+        // Resume the game
         isPaused = false;
         pauseButton.textContent = "Pause";
-        startTimer();  // Start the timer again
-        document.getElementById('overlay').classList.add('hidden');  // Hide overlay
-        lockBoard = false;  // Unlock the board for flipping
-
-    } else { // If currently running, pause the game
+        startTimer(); // Resume the timer
+    } else {
+        // Pause the game
         isPaused = true;
         pauseButton.textContent = "Resume";
-        stopTimer();  // Stop the timer
-        document.getElementById('overlay').classList.remove('hidden');  // Show overlay
-        lockBoard = true;  // Lock the board to prevent card flipping
+        stopTimer(); // Stop the timer
     }
 }
 
@@ -150,5 +152,9 @@ function checkForCompletion() {
     }
 }
 
+let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
+
+// Add the event listener to toggle pause
+document.getElementById('pauseGameButton').addEventListener("click", togglePause);
 
 
