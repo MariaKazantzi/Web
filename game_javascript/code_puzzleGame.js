@@ -8,6 +8,20 @@ puzzlePieces = puzzlePieces.sort(() => Math.random() - 0.5);
 
 let selectedPiece = null; // To keep track of the first selected piece
 
+const startGameButton = document.getElementById("startGameButton");
+
+startGameButton.addEventListener("click", () => {
+    // Hide the "Start Game" button
+    startGameButton.style.display = "none";
+
+    // Show the "Pause" button
+    document.getElementById("pauseGameButton").classList.remove("hidden");
+
+    // Start the game (e.g., display puzzle pieces)
+    initializePuzzle();
+});
+
+
 puzzlePieces.forEach((piece) => {
     const pieceDiv = document.createElement("div");
     pieceDiv.classList.add("puzzle-piece");
