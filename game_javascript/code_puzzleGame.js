@@ -157,4 +157,13 @@ let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
 // Add the event listener to toggle pause
 document.getElementById('pauseGameButton').addEventListener("click", togglePause);
 
+// Event listener for the Back to Start button
+document.getElementById('backToStartButton').addEventListener('click', function() {
+    // Redirect to initial.html
+    window.location.href = 'initial_page.html';
+});
 
+// When the game starts, show the Back to Start button
+document.getElementById('startGameButton').addEventListener('click', function() {
+    document.getElementById('backToStartButton').style.display = 'block';
+});
