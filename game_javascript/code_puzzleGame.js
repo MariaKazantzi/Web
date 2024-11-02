@@ -55,16 +55,35 @@ function handlePieceClick(piece) {
     }
 
     if (selectedPiece === null) {
+        // First click: Select the first piece and add a border
         selectedPiece = piece;
         piece.classList.add("selected");
+        piece.style.border = "2px solid blue"; // Add blue border to the first selected piece
     } else {
+        // Second click: Select the second piece and add a border
+        piece.classList.add("selected");
+        piece.style.border = "2px solid blue"; // Add blue border to the second selected piece
+
+        // Swap the two selected pieces
         swapPieces(selectedPiece, piece);
+
+        // Remove borders from both pieces after swapping
+        selectedPiece.style.border = "none";
+        piece.style.border = "none";
+
+        // Remove 'selected' class from both pieces
         selectedPiece.classList.remove("selected");
+        piece.classList.remove("selected");
+
+        // Reset selection
         selectedPiece = null;
 
+        // Check if the puzzle is now solved
         checkForCompletion();
     }
 }
+
+
 
 
 // Function to swap two pieces
