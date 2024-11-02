@@ -8,6 +8,8 @@ puzzlePieces = puzzlePieces.sort(() => Math.random() - 0.5);
 
 let selectedPiece = null; // To keep track of the first selected piece
 
+let isGameStarted = false; // Track if the game has started
+
 const startGameButton = document.getElementById("startGameButton");
 
 startGameButton.addEventListener("click", () => {
@@ -16,6 +18,9 @@ startGameButton.addEventListener("click", () => {
 
     // Show the "Pause" button
     document.getElementById("pauseGameButton").classList.remove("hidden");
+    document.getElementById('backToStartButton').style.display = 'block';
+
+    isGameStarted = true; // Enable piece clicks
 
     // Start the game (e.g., display puzzle pieces)
     initializePuzzle();
@@ -41,6 +46,8 @@ puzzlePieces.forEach((piece) => {
 
 // Handle click events on pieces
 function handlePieceClick(piece) {
+    if (!isGameStarted) return; // Prevent clicking if game hasn't started
+
     // Start the timer on the first click
     if (!isTimerStarted) {
         startTimer();
@@ -48,19 +55,17 @@ function handlePieceClick(piece) {
     }
 
     if (selectedPiece === null) {
-        // First click: Select the piece
         selectedPiece = piece;
-        piece.classList.add("selected"); // Optional: Add a visual indicator for selected piece
+        piece.classList.add("selected");
     } else {
-        // Second click: Swap with the previously selected piece
         swapPieces(selectedPiece, piece);
         selectedPiece.classList.remove("selected");
-        selectedPiece = null; // Reset selection
+        selectedPiece = null;
 
-        // Check if the puzzle is now solved
         checkForCompletion();
     }
 }
+
 
 // Function to swap two pieces
 function swapPieces(piece1, piece2) {
