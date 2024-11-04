@@ -46,7 +46,7 @@ puzzlePieces.forEach((piece) => {
 
 // Handle click events on pieces
 function handlePieceClick(piece) {
-    if (!isGameStarted) return; // Prevent clicking if game hasn't started
+    if (!isGameStarted || isPaused) return; // Prevent clicking if game hasn't started or is paused
 
     // Start the timer on the first click
     if (!isTimerStarted) {
@@ -82,8 +82,6 @@ function handlePieceClick(piece) {
         checkForCompletion();
     }
 }
-
-
 
 
 // Function to swap two pieces
