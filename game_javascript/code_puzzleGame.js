@@ -10,6 +10,9 @@ let selectedPiece = null; // To keep track of the first selected piece
 
 let isGameStarted = false; // Track if the game has started
 
+// Get the overlay element
+const overlay = document.getElementById('overlay');
+
 const startGameButton = document.getElementById("startGameButton");
 
 startGameButton.addEventListener("click", () => {
@@ -149,11 +152,13 @@ function togglePause() {
         // Resume the game
         isPaused = false;
         pauseButton.textContent = "Pause";
+        overlay.classList.add('hidden');  // Hide the overlay
         startTimer(); // Resume the timer
     } else {
         // Pause the game
         isPaused = true;
         pauseButton.textContent = "Resume";
+        overlay.classList.remove('hidden');  // Show the overlay
         stopTimer(); // Stop the timer
     }
 }

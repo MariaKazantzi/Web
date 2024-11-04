@@ -107,7 +107,6 @@ function togglePause() {
         isPaused = true;
         pauseButton.textContent = "Resume";
         stopTimer();  // Stop the timer
-        console.log("Pausing game...");
         overlay.classList.remove('hidden');  // Show the overlay
         lockBoard = true;  // Lock the board to prevent card flipping
 
