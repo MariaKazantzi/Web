@@ -100,22 +100,6 @@ function swapPieces(piece1, piece2) {
     piece2.dataset.index = tempIndex;
 }
 
-// Check if all pieces are in the correct order
-function checkForCompletion() {
-    const pieces = document.querySelectorAll(".puzzle-piece");
-    let isComplete = true;
-
-    pieces.forEach((piece, index) => {
-        if (parseInt(piece.dataset.index) !== index) {
-            isComplete = false;
-        }
-    });
-
-    if (isComplete) {
-        alert("Congratulations! You solved the puzzle!");
-    }
-}
-
 let timer; // Timer variable
 let timeElapsed = 0; // Time in seconds
 let timerInterval; // Variable to hold the setInterval reference
@@ -174,8 +158,22 @@ function checkForCompletion() {
     });
 
     if (isComplete) {
-        stopTimer();  // Stop the timer when the puzzle is solved
+        stopTimer(); // Stop the timer when the puzzle is solved
         alert("Congratulations! You solved the puzzle!");
+
+        // Check if the time qualifies as a high score
+        const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+        if (highScores.length < 3 || highScores.some(score => timeElapsed < score.time)) {
+            const playerName = prompt("New High Score! Enter your name:");
+
+            if (playerName) {
+                updateHighScores(playerName, timeElapsed);
+            }
+        }
+
+        // Display updated high scores in the existing table
+        displayHighScores();
     }
 }
 
@@ -194,3 +192,47 @@ document.getElementById('backToStartButton').addEventListener('click', function(
 document.getElementById('startGameButton').addEventListener('click', function() {
     document.getElementById('backToStartButton').style.display = 'block';
 });
+
+// Function to check and update high scores
+function updateHighScores(name, timeElapsed) {
+    // Get existing high scores from localStorage, or set an empty array if none exist
+    let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    // Push the new score (name + time) to the list
+    highScores.push({ name: name, time: timeElapsed });
+
+    // Sort scores in ascending order (because lower time is better)
+    highScores.sort((a, b) => a.time - b.time);
+
+    // Keep only the top 3 scores
+    highScores = highScores.slice(0, 3);
+
+    // Save the updated list back to localStorage
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+
+    // Update the high scores table on the page
+    displayHighScores();
+}
+
+function displayHighScores() {
+    const highScoresTable = document.getElementById('highScoresTablePuzzle');
+    const tbody = highScoresTable.querySelector('tbody');
+    tbody.innerHTML = ''; // Clear existing rows
+
+    // Retrieve high scores from localStorage
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    // Populate the table with high scores
+    highScores.forEach((score, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="border px-4 py-2">${index + 1}</td>
+            <td class="border px-4 py-2">${score.name}</td>
+            <td class="border px-4 py-2">${score.time}</td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Make the high scores table visible
+    highScoresTable.classList.remove('hidden');
+}
