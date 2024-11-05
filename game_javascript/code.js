@@ -1,9 +1,62 @@
-const dogImages = [
-'images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg'];
+const dogImages = ['images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg'];
 
 const cardCount = dogImages.length;
-
 let cardsArray = [...dogImages, ...dogImages]; // Duplicate images to create pairs
+let firstCard, secondCard;
+let hasFlippedCard = false;
+let lockBoard = false;
+let timer; // Timer variable
+let timeElapsed = 0; // Time in seconds
+let timerInterval; // Variable to hold the setInterval reference
+let isPaused = false; // Variable to check if the game is paused
+let matchedPairs = 0; // Initialize matched pairs counter
+const totalPairs = cardsArray.length / 2; // Total pairs to match
+
+// Get the overlay element
+const overlay = document.getElementById('overlay');
+
+let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
+
+let hasSavedScore = false; // Add this flag to track if the score has been saved
+
+// Initialize the game 
+
+// Function to dynamically set the grid layout
+function setGridLayout(cur_cardCount) {
+    const gameBoard = document.getElementById("gameBoard");
+    let columns;
+
+    // Calculate number of columns based on card count and viewport width
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth >= 1024) { 
+        columns = Math.min(10, cur_cardCount); // Max 10 columns
+    } else if (screenWidth >= 768) { // Medium screens
+        columns = Math.min(6, cur_cardCount); // Max 6 columns
+    } else if (screenWidth >= 640) { // Small screens
+        columns = Math.min(4, cur_cardCount); // Max 4 columns
+    } else { 
+        columns = Math.min(2, cur_cardCount); // Max 2 columns
+    }
+
+    // Calculate rows based on the card count and ensure even number of rows
+    let rows = Math.ceil(cur_cardCount / columns);
+    if (rows % 2 !== 0) rows += 1; 
+
+    gameBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+    gameBoard.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+}
+
+// Call this function when the page loads and also when the window is resized
+window.onload = () => {
+    setGridLayout(cardCount);
+};
+
+window.onresize = () => {
+    setGridLayout(cardCount);
+};
+
+setGridLayout(cardCount);
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -48,20 +101,7 @@ function createGameBoard() {
     });
 }
 
-let firstCard, secondCard;
-let hasFlippedCard = false;
-let lockBoard = false;
-
-let timer; // Timer variable
-let timeElapsed = 0; // Time in seconds
-let timerInterval; // Variable to hold the setInterval reference
-let isPaused = false; // Variable to check if the game is paused
-
-let matchedPairs = 0; // Initialize matched pairs counter
-const totalPairs = cardsArray.length / 2; // Total pairs to match
-
-// Get the overlay element
-const overlay = document.getElementById('overlay');
+// Timer and Pause functions
 
 function startTimer() {
     // Only start the timer if it isn't already running
@@ -84,8 +124,6 @@ function stopTimer() {
     clearInterval(timerInterval);
     timerInterval = null; // Clear the reference to the timer interval
 }
-
-let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
 
 function togglePause() {
     const pauseButton = document.getElementById('pauseGameButton');
@@ -140,6 +178,8 @@ function createPausableTimeout(callback, delay) {
     return { pause, resume };  // Return pause and resume functions
 }
 
+// Game logic functions
+
 function flipCard() {
     if (lockBoard || this === firstCard || isPaused) return; // Avoid double clicking or more than 2 flips
 
@@ -183,7 +223,23 @@ function disableCards() {
     resetBoard();
 }
 
-// Function to check and update high scores
+function unflipCards() {
+    lockBoard = true;
+
+    // Hide the unmatched cards after a delay (this can be customized)
+    setTimeout(() => {
+        if (firstCard && secondCard && !firstCard.classList.contains('matched') && !secondCard.classList.contains('matched')) {
+            firstCard.querySelector('.front').classList.add('hidden');
+            firstCard.querySelector('.back').classList.remove('hidden');
+            secondCard.querySelector('.front').classList.add('hidden');
+            secondCard.querySelector('.back').classList.remove('hidden');
+        }
+        resetBoard();
+    }, 1000); // Change delay if necessary
+}
+
+// High Scores functions
+
 function updateHighScores(name, timeElapsed) {
     // Get existing high scores from localStorage, or set an empty array if none exist
     let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
@@ -239,7 +295,98 @@ function displayHighScores(container) {
     container.classList.remove('hidden'); // Show the high scores container
 }
 
-let hasSavedScore = false; // Add this flag to track if the score has been saved
+function toggleScoreTable() {
+    // Check if the high scores message already exists
+    const highScoresMessage = document.getElementById('draggableMessage');
+
+    // Create the high scores table if it doesn't exist
+    if (highScoresMessage) {
+        // Create a container for high scores if not already present
+        let scoresContainer = document.getElementById('highScoresContainer');
+
+        // Create a new container if it doesn't exist
+        if (!scoresContainer) {
+            scoresContainer = document.createElement('div');
+            scoresContainer.id = 'highScoresContainer';
+            scoresContainer.innerHTML = `
+                <h2 class="text-2xl font-bold mb-2">High Scores</h2>
+                <table id="highScoresTable" class="border-collapse w-full mt-4">
+                    <thead>
+                        <tr>
+                            <th class="border px-4 py-2">#</th>
+                            <th class="border px-4 py-2">Name</th>
+                            <th class="border px-4 py-2">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button id="closeHighScoresButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Close
+                </button>
+            `;
+            highScoresMessage.appendChild(scoresContainer);
+            displayHighScores(); // Display high scores in the newly created table
+            
+            // Add event listener to close the high scores message
+            document.getElementById('closeHighScoresButton').addEventListener('click', () => {
+                scoresContainer.classList.add('hidden'); // Hide the scores container
+            });
+        } else {
+            // Toggle visibility of the existing scores container
+            scoresContainer.classList.toggle('hidden');
+        }
+    }
+}
+
+function makeDraggable(element) {
+    const dragHandle = element.querySelector('.drag-handle');
+    let offsetX = 0, offsetY = 0, initialX = 0, initialY = 0;
+
+    // Mouse down event to start dragging
+    dragHandle.onmousedown = dragStart;
+
+    function dragStart(e) {
+        e.preventDefault();
+        // Get the initial mouse position
+        initialX = e.clientX;
+        initialY = e.clientY;
+
+        // Attach the event listeners for mousemove and mouseup
+        document.onmousemove = drag;
+        document.onmouseup = dragEnd;
+    }
+
+    function drag(e) {
+        e.preventDefault();
+
+        // Calculate the new cursor position
+        offsetX = initialX - e.clientX;
+        offsetY = initialY - e.clientY;
+        initialX = e.clientX;
+        initialY = e.clientY;
+
+        // Set the new position of the draggable element
+        element.style.top = (element.offsetTop - offsetY) + "px";
+        element.style.left = (element.offsetLeft - offsetX) + "px";
+    }
+
+    function dragEnd() {
+        // Remove the event listeners when dragging ends
+        document.onmousemove = null;
+        document.onmouseup = null;
+    }
+}
+
+function clearHighScores() {
+    // Remove high scores from localStorage
+    localStorage.removeItem('highScores');
+
+    // Clear the displayed high scores table
+    const highScoresTable = document.getElementById('highScoresTable').getElementsByTagName('tbody')[0];
+    highScoresTable.innerHTML = ''; // Clear all table rows
+}
+
+// End game function
 
 function endGame() {
     stopTimer(); // Stop the timer
@@ -326,88 +473,6 @@ function endGame() {
     makeDraggable(message);
 }
 
-function toggleScoreTable() {
-    // Check if the high scores message already exists
-    const highScoresMessage = document.getElementById('draggableMessage');
-
-    // Create the high scores table if it doesn't exist
-    if (highScoresMessage) {
-        // Create a container for high scores if not already present
-        let scoresContainer = document.getElementById('highScoresContainer');
-
-        // Create a new container if it doesn't exist
-        if (!scoresContainer) {
-            scoresContainer = document.createElement('div');
-            scoresContainer.id = 'highScoresContainer';
-            scoresContainer.innerHTML = `
-                <h2 class="text-2xl font-bold mb-2">High Scores</h2>
-                <table id="highScoresTable" class="border-collapse w-full mt-4">
-                    <thead>
-                        <tr>
-                            <th class="border px-4 py-2">#</th>
-                            <th class="border px-4 py-2">Name</th>
-                            <th class="border px-4 py-2">Time</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-                <button id="closeHighScoresButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    Close
-                </button>
-            `;
-            highScoresMessage.appendChild(scoresContainer);
-            displayHighScores(); // Display high scores in the newly created table
-            
-            // Add event listener to close the high scores message
-            document.getElementById('closeHighScoresButton').addEventListener('click', () => {
-                scoresContainer.classList.add('hidden'); // Hide the scores container
-            });
-        } else {
-            // Toggle visibility of the existing scores container
-            scoresContainer.classList.toggle('hidden');
-        }
-    }
-}
-
-function makeDraggable(element) {
-    const dragHandle = element.querySelector('.drag-handle');
-    let offsetX = 0, offsetY = 0, initialX = 0, initialY = 0;
-
-    // Mouse down event to start dragging
-    dragHandle.onmousedown = dragStart;
-
-    function dragStart(e) {
-        e.preventDefault();
-        // Get the initial mouse position
-        initialX = e.clientX;
-        initialY = e.clientY;
-
-        // Attach the event listeners for mousemove and mouseup
-        document.onmousemove = drag;
-        document.onmouseup = dragEnd;
-    }
-
-    function drag(e) {
-        e.preventDefault();
-
-        // Calculate the new cursor position
-        offsetX = initialX - e.clientX;
-        offsetY = initialY - e.clientY;
-        initialX = e.clientX;
-        initialY = e.clientY;
-
-        // Set the new position of the draggable element
-        element.style.top = (element.offsetTop - offsetY) + "px";
-        element.style.left = (element.offsetLeft - offsetX) + "px";
-    }
-
-    function dragEnd() {
-        // Remove the event listeners when dragging ends
-        document.onmousemove = null;
-        document.onmouseup = null;
-    }
-}
-
 function restartGame() {
     // Remove the success message
     const message = document.querySelector('.absolute');
@@ -447,30 +512,6 @@ function restartGame() {
     document.getElementById('pauseGameButton').classList.remove('hidden'); // Ensure the pause button is visible
 }
 
-function clearHighScores() {
-    // Remove high scores from localStorage
-    localStorage.removeItem('highScores');
-
-    // Clear the displayed high scores table
-    const highScoresTable = document.getElementById('highScoresTable').getElementsByTagName('tbody')[0];
-    highScoresTable.innerHTML = ''; // Clear all table rows
-}
-
-function unflipCards() {
-    lockBoard = true;
-
-    // Hide the unmatched cards after a delay (this can be customized)
-    setTimeout(() => {
-        if (firstCard && secondCard && !firstCard.classList.contains('matched') && !secondCard.classList.contains('matched')) {
-            firstCard.querySelector('.front').classList.add('hidden');
-            firstCard.querySelector('.back').classList.remove('hidden');
-            secondCard.querySelector('.front').classList.add('hidden');
-            secondCard.querySelector('.back').classList.remove('hidden');
-        }
-        resetBoard();
-    }, 1000); // Change delay if necessary
-}
-
 function resetBoard() {
     [hasFlippedCard, lockBoard] = [false, false];
     [firstCard, secondCard] = [null, null];
@@ -481,6 +522,7 @@ document.getElementById('startGameButton').addEventListener('click', function ()
     createGameBoard();
     document.getElementById('startGameButton').classList.add('hidden'); // Hide Start Button
     document.getElementById('pauseGameButton').classList.remove('hidden'); // Show Pause Button
+    document.getElementById('backToStartButton').style.display = 'block'; // Show Back to Start Button
 });
 
 // Add event listener for pausing/resuming the game
@@ -492,48 +534,5 @@ document.getElementById('backToStartButton').addEventListener('click', function(
     window.location.href = 'initial_page.html';
 });
 
-// When the game starts, show the Back to Start button
-document.getElementById('startGameButton').addEventListener('click', function() {
-    document.getElementById('backToStartButton').style.display = 'block';
-});
 
-// Function to dynamically set the grid layout
-function setGridLayout(cur_cardCount) {
-    const gameBoard = document.getElementById("gameBoard");
 
-    // Determine the optimal number of columns based on screen size
-    let columns;
-
-    // Calculate number of columns based on card count and viewport width
-    const screenWidth = window.innerWidth;
-
-    if (screenWidth >= 1024) { // Large screens
-        columns = Math.min(10, cur_cardCount); // Max 10 columns
-    } else if (screenWidth >= 768) { // Medium screens
-        columns = Math.min(6, cur_cardCount); // Max 6 columns
-    } else if (screenWidth >= 640) { // Small screens
-        columns = Math.min(4, cur_cardCount); // Max 4 columns
-    } else { // Extra small screens
-        columns = Math.min(2, cur_cardCount); // Max 2 columns
-    }
-
-    // Calculate rows based on the card count and ensure even number of rows
-    let rows = Math.ceil(cur_cardCount / columns);
-    if (rows % 2 !== 0) rows += 1; // Ensure even row count
-
-    // Set the CSS grid styles based on the calculated rows and columns
-    gameBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-    gameBoard.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-}
-
-// Call this function when the page loads and also when the window is resized
-window.onload = () => {
-    setGridLayout(cardCount);
-};
-
-window.onresize = () => {
-    setGridLayout(cardCount);
-};
-
-// Example usage: adjust layout
-setGridLayout(cardCount); // Call this with the number of cards

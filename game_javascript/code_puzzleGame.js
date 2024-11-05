@@ -193,6 +193,46 @@ document.getElementById('startGameButton').addEventListener('click', function() 
     document.getElementById('backToStartButton').style.display = 'block';
 });
 
+function showHighScoresMessage() {
+    const existingMessage = document.getElementById('draggableHighScoresMessage');
+    if (existingMessage) {
+        existingMessage.remove(); // Remove any existing message to avoid duplicates
+    }
+
+    // Create the high scores message container
+    const message = document.createElement('div');
+    message.id = "draggableHighScoresMessage";
+    message.classList.add('absolute', 'bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'text-center', 'z-10');
+    message.style.position = "fixed";
+    message.style.top = "50%";
+    message.style.left = "50%";
+    message.style.transform = "translate(-50%, -50%)";
+
+    message.innerHTML = `
+        <div class="drag-handle" style="cursor: move; background-color: lightgray; padding: 5px; border-radius: 5px; font-weight: bold;">
+            Drag Me
+        </div>
+        <h2 class="text-2xl font-bold mb-4">High Scores</h2>
+        <div id="highScoresContainer"></div>
+        <button id="closeHighScoresButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+            Close
+        </button>
+    `;
+
+    document.body.appendChild(message);
+
+    // Display the high scores inside the highScoresContainer
+    displayHighScores(document.getElementById('highScoresContainer'));
+
+    // Add event listener to close the high scores message
+    document.getElementById('closeHighScoresButton').addEventListener('click', () => {
+        message.remove(); // Close the high scores container
+    });
+
+    // Make the message draggable
+    makeDraggable(message);
+}
+
 // Function to check and update high scores
 function updateHighScores(name, timeElapsed) {
     // Get existing high scores from localStorage, or set an empty array if none exist
@@ -214,25 +254,69 @@ function updateHighScores(name, timeElapsed) {
     displayHighScores();
 }
 
-function displayHighScores() {
-    const highScoresTable = document.getElementById('highScoresTablePuzzle');
-    const tbody = highScoresTable.querySelector('tbody');
-    tbody.innerHTML = ''; // Clear existing rows
-
-    // Retrieve high scores from localStorage
+function displayHighScores(container) {
     const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+    container.innerHTML = ''; // Clear existing content
 
-    // Populate the table with high scores
-    highScores.forEach((score, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="border px-4 py-2">${index + 1}</td>
-            <td class="border px-4 py-2">${score.name}</td>
-            <td class="border px-4 py-2">${score.time}</td>
-        `;
-        tbody.appendChild(row);
-    });
+    if (highScores.length === 0) {
+        container.innerHTML = '<p>No high scores yet.</p>';
+        return;
+    }
 
-    // Make the high scores table visible
-    highScoresTable.classList.remove('hidden');
+    // Create table
+    const highScoresTable = document.createElement('table');
+    highScoresTable.classList.add('border', 'border-collapse', 'w-full');
+
+    highScoresTable.innerHTML = `
+        <thead>
+            <tr>
+                <th class="border px-4 py-2">Rank</th>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Time (seconds)</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${highScores.map((score, index) => `
+                <tr>
+                    <td class="border px-4 py-2">${index + 1}</td>
+                    <td class="border px-4 py-2">${score.name}</td>
+                    <td class="border px-4 py-2">${score.time}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+
+    container.appendChild(highScoresTable);
 }
+
+document.getElementById('highScoresButton').addEventListener('click', showHighScoresMessage);
+
+function makeDraggable(element) {
+    const dragHandle = element.querySelector('.drag-handle');
+    let offsetX = 0, offsetY = 0, initialX = 0, initialY = 0;
+
+    dragHandle.onmousedown = (e) => {
+        e.preventDefault();
+        initialX = e.clientX;
+        initialY = e.clientY;
+
+        document.onmousemove = drag;
+        document.onmouseup = stopDrag;
+    };
+
+    function drag(e) {
+        offsetX = initialX - e.clientX;
+        offsetY = initialY - e.clientY;
+        initialX = e.clientX;
+        initialY = e.clientY;
+
+        element.style.top = `${element.offsetTop - offsetY}px`;
+        element.style.left = `${element.offsetLeft - offsetX}px`;
+    }
+
+    function stopDrag() {
+        document.onmousemove = null;
+        document.onmouseup = null;
+    }
+}
+
