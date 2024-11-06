@@ -1,3 +1,6 @@
+const gameId = "dogPuzzleGame"; // Set a unique identifier for each game type
+const highScoresKey = `highScores_${gameId}`; // Unique key for this specific game’s high scores
+
 const dogImages = ['images/11.jpg', 'images/12.jpg', 'images/13.jpg', 'images/14.jpg', 'images/15.jpg','images/16.jpg', 'images/17.jpg', 'images/18.jpg', 'images/19.jpg', 'images/20.jpg'];
 
 const randomImage = dogImages[Math.floor(Math.random() * dogImages.length)];
@@ -127,7 +130,6 @@ function updateTimerDisplay() {
     document.getElementById('timer').textContent = `Time: ${formattedTime}`;
 }
 
-
 // Toggle Pause and Resume function
 function togglePause() {
     const pauseButton = document.getElementById('pauseGameButton');
@@ -148,9 +150,12 @@ function togglePause() {
 }
 
 function checkForCompletion() {
+    let highScores = JSON.parse(localStorage.getItem(highScoresKey)) || [];
+
     const pieces = document.querySelectorAll(".puzzle-piece");
     let isComplete = true;
 
+    // Check if each piece is in the correct position
     pieces.forEach((piece, index) => {
         if (parseInt(piece.dataset.index) !== index) {
             isComplete = false;
@@ -162,84 +167,76 @@ function checkForCompletion() {
         alert("Congratulations! You solved the puzzle!");
 
         // Hide the pause button when the game ends
-    document.getElementById('pauseGameButton').classList.add('hidden');
+        document.getElementById('pauseGameButton').classList.add('hidden');
 
-    // Retrieve high scores from localStorage
-    let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+        // Retrieve high scores from localStorage
+        let highScores = JSON.parse(localStorage.getItem(highScoresKey)) || [];
+        let shouldAskForName = true;
 
-    // Flag to control if we need to ask for the name
-    let shouldAskForName = true;
+        // Check if the current time qualifies as a high score
+        if (highScores.length === 3 && highScores[2].time <= timeElapsed) {
+            shouldAskForName = false; // Don't ask for a name if the time isn't a top score
+        } else if (highScores.length < 3 || timeElapsed < highScores[2].time) {
+            shouldAskForName = true; // Ask for the name if the time qualifies as a top score
+        }
 
-    // Check if there are already 3 scores and if the current time is worse
-    if (highScores.length === 3 && highScores[2].time <= timeElapsed) {
-        shouldAskForName = false; // Don't ask for the name if the time is worse than the top 3
-    }
+        // Display the congrats message with high scores table inside
+        const message = document.createElement('div');
+        message.classList.add('absolute', 'bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'text-center', 'z-10');
+        message.id = "draggableMessage"; 
+        message.style.position = "fixed";
+        message.style.top = "50%";
+        message.style.left = "50%";
+        message.style.transform = "translate(-50%, -50%)"; 
+        message.innerHTML = `
+            <div class="drag-handle" style="cursor: move; background-color: lightgray; padding: 5px; border-radius: 5px; font-weight: bold;">
+                Drag Me
+            </div>
+            <div style="text-align: center; padding: 20px;">
+                <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
+                <p>You completed the puzzle in ${timeElapsed} seconds!</p>
+                ${shouldAskForName ? ` 
+                <label for="nameInput" class="block text-gray-700 text-sm font-bold mb-2">Enter your name:</label>
+                <input id="nameInput" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Your Name">
+                <button id="saveScoreButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Save Score
+                </button>
+                ` : ''}
+                <button id="restartButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Restart Game
+                </button>
+            </div>
+            <div id="highScoresContainer" class="mt-4">
+                <h2 class="text-2xl font-bold mb-2">High Scores</h2>
+                <!-- High scores table will be inserted here -->
+            </div>
+        `;
 
-    const existingMessage = document.querySelector('.absolute');
-    if (existingMessage) {
-        existingMessage.remove(); // Remove any existing message
-    }
+        document.body.appendChild(message);
 
-    const message = document.createElement('div');
-    message.classList.add('absolute', 'bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'text-center', 'z-10');
-    message.id = "draggableMessage"; 
-    message.style.position = "fixed";
-    message.style.top = "50%";
-    message.style.left = "50%";
-    message.style.transform = "translate(-50%, -50%)"; 
-    message.innerHTML = `
-    <div class="drag-handle" style="cursor: move; background-color: lightgray; padding: 5px; border-radius: 5px; font-weight: bold;">
-        Drag Me
-    </div>
-    <div style="text-align: center; padding: 20px;">
-        <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
-        <p>You have matched all the pairs in ${timeElapsed} seconds!</p>
-        ${shouldAskForName ? ` 
-        <label for="nameInput" class="block text-gray-700 text-sm font-bold mb-2">Enter your name:</label>
-        <input id="nameInput" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Your Name">
-        <button id="saveScoreButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Save Score
-        </button>
-        ` : ''}
-        <button id="restartButton" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-            Restart Game
-        </button>
-    </div>
-    `;
+        // Show high scores inside the message
+        displayHighScores(document.getElementById("highScoresContainer"));
 
-    document.body.appendChild(message);
+        // Handle saving the score if the player enters a name
+        if (shouldAskForName) {
+            document.getElementById('saveScoreButton').addEventListener('click', () => {
+                const name = document.getElementById('nameInput').value;
+                if (name) {
+                    updateHighScores(name, timeElapsed); // Save the high score
+                    displayHighScores(document.getElementById("highScoresContainer")); // Update displayed scores
+                } else {
+                    alert("Please enter a name to save your score.");
+                }
+            });
+        }
 
-    // Create the high scores container and append it to the message
-    const highScoresContainer = document.createElement('div');
-    highScoresContainer.id = 'highScoresContainer';
-    highScoresContainer.classList.add('hidden'); // Initially hidden
-    message.appendChild(highScoresContainer);
-
-    // Immediately show the high scores after displaying the message
-    displayHighScores(highScoresContainer); // Pass the container to display scores
-
-    // Add event listener to save score
-    if (shouldAskForName) {
-        document.getElementById('saveScoreButton').addEventListener('click', () => {
-            const name = document.getElementById('nameInput').value;
-
-            // Only allow saving the score if a name is entered
-            if (!hasSavedScore && name) {
-                updateHighScores(name, timeElapsed); // Save the high score
-                hasSavedScore = true; // Set flag to true to prevent further saves
-                displayHighScores(highScoresContainer); // Update displayed scores
-            } else if (hasSavedScore) {
-                alert("You have already saved your score!");
-            } else {
-                alert("Please enter a name to save your score.");
-            }
-        });
-    }
-    // Make the message draggable
-    makeDraggable(message);
-
+        // Make the message draggable
+        makeDraggable(message);
     }
 }
+
+
+
 
 let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
 
@@ -258,30 +255,27 @@ document.getElementById('startGameButton').addEventListener('click', function() 
 });
 
 function updateHighScores(name, timeElapsed) {
-    // Get existing high scores from localStorage, or set an empty array if none exist
-    let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-
-    // Push the new score (name + time) to the list
+    let highScores = JSON.parse(localStorage.getItem(highScoresKey)) || [];
     highScores.push({ name: name, time: timeElapsed });
 
-    // Sort scores in ascending order (because lower time is better)
+    // Sort and slice to keep only the top 3
     highScores.sort((a, b) => a.time - b.time);
+    highScores = highScores.slice(0, 3); // Keep top 3 scores
 
-    // Keep only the top 3 scores
-    highScores = highScores.slice(0, 3);
+    // Save to localStorage
+    localStorage.setItem(highScoresKey, JSON.stringify(highScores));
 
-    // Save the updated list back to localStorage
-    localStorage.setItem('highScores', JSON.stringify(highScores));
-
-    // Update the high scores table on the page
+    // Update the displayed high scores
     displayHighScores();
 }
 
-function displayHighScores(container) {
-    const highScoresTable = document.createElement('table'); // Create a new table element
-    highScoresTable.classList.add('highScoresTable', 'border', 'border-collapse', 'mx-auto', 'mt-4'); // Add classes for styling
 
-    // Create table headers
+
+function displayHighScores(container) {
+    const highScores = JSON.parse(localStorage.getItem(highScoresKey)) || [];
+
+    const highScoresTable = document.createElement('table');
+    highScoresTable.classList.add('highScoresTable', 'border', 'border-collapse', 'mx-auto', 'mt-4');
     highScoresTable.innerHTML = `
         <thead>
             <tr>
@@ -294,9 +288,7 @@ function displayHighScores(container) {
     `;
 
     const tbody = highScoresTable.querySelector('tbody');
-    tbody.innerHTML = ''; // Clear existing table rows
-
-    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+    tbody.innerHTML = ''; // Clear any existing rows
 
     highScores.forEach((score, index) => {
         const row = tbody.insertRow();
@@ -308,9 +300,11 @@ function displayHighScores(container) {
     });
 
     container.innerHTML = ''; // Clear existing content
-    container.appendChild(highScoresTable); // Append the new table to the container
-    container.classList.remove('hidden'); // Show the high scores container
+    container.appendChild(highScoresTable);
+    container.classList.remove('hidden');
 }
+
+
 
 function toggleScoreTable() {
     // Check if the high scores message already exists
@@ -395,11 +389,9 @@ function makeDraggable(element) {
 }
 
 function clearHighScores() {
-    // Remove high scores from localStorage
-    localStorage.removeItem('highScores');
-
-    // Clear the displayed high scores table
-    const highScoresTable = document.getElementById('highScoresTable').getElementsByTagName('tbody')[0];
-    highScoresTable.innerHTML = ''; // Clear all table rows
+    localStorage.removeItem(highScoresKey); // Clear specific game's high scores
+    const tbody = document.getElementById('highScoresTablePuzzle').querySelector('tbody');
+    tbody.innerHTML = ''; // Clear the table body
 }
+
 
