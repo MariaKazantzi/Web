@@ -149,6 +149,17 @@ body {
     border: 1px solid #ddd; /* Optional styling for visual separation */
 }
 
+.reference-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 150px; /* Adjust the size as desired */
+    height: 150px; /* Maintain the same aspect ratio if necessary */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+
+
 
 
 

@@ -28,9 +28,13 @@ startGameButton.addEventListener("click", () => {
 
     isGameStarted = true; // Enable piece clicks
 
+    // Set the reference image source to the puzzle image
+    document.getElementById('referenceImage').src = randomImage;
+
     // Start the game (e.g., display puzzle pieces)
     initializePuzzle();
 });
+
 
 
 puzzlePieces.forEach((piece) => {
