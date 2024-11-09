@@ -31,8 +31,6 @@ startGameButton.addEventListener("click", () => {
     // Set the reference image source to the puzzle image
     document.getElementById('referenceImage').src = randomImage;
 
-    // Start the game (e.g., display puzzle pieces)
-    initializePuzzle();
 });
 
 
@@ -236,10 +234,12 @@ function checkForCompletion() {
 
         // Make the message draggable
         makeDraggable(message);
+
+        // Attach the event listener to the Restart button
+        document.getElementById('restartButton').addEventListener('click', restartGame);
     }
+    
 }
-
-
 
 
 let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
@@ -397,5 +397,64 @@ function clearHighScores() {
     const tbody = document.getElementById('highScoresTablePuzzle').querySelector('tbody');
     tbody.innerHTML = ''; // Clear the table body
 }
+
+function restartGame() {
+    // Clear the puzzle container to remove all pieces
+    const puzzleContainer = document.getElementById("puzzle-container");
+    puzzleContainer.innerHTML = '';  // This will remove all current puzzle pieces
+
+    // Reset the puzzle pieces array and shuffle it again
+    puzzlePieces = [...Array(16).keys()];  // Reset to the original set of 16 puzzle pieces
+    puzzlePieces = puzzlePieces.sort(() => Math.random() - 0.5);  // Shuffle the array
+
+    // Reset other game states (e.g., timer, game status)
+    timeElapsed = 0;  // Reset time to 0
+    isTimerStarted = false;  // Reset timer flag
+    isGameStarted = false;  // Reset game start flag
+
+    // Initialize the puzzle again by creating new puzzle pieces
+    initializePuzzle();
+
+    // Hide the restart button and start the game again
+    document.getElementById('restartButton').style.display = 'none';
+
+    // Show the start button and allow to restart
+    startGameButton.style.display = 'block';
+
+    // Reset the timer to 0
+    stopTimer();
+    startTimer();
+
+    // Remove the congratulatory message
+    const congratulatoryMessage = document.getElementById('draggableMessage');
+    if (congratulatoryMessage) {
+        congratulatoryMessage.remove(); // Remove the message from the DOM
+    }
+}
+
+
+
+function initializePuzzle() {
+    const puzzleContainer = document.getElementById("puzzle-container");
+
+    // Loop through the puzzle pieces and create each piece
+    puzzlePieces.forEach((piece) => {
+        const pieceDiv = document.createElement("div");
+        pieceDiv.classList.add("puzzle-piece");
+
+        // Set up the background image and position
+        pieceDiv.style.backgroundImage = `url('${randomImage}')`;
+        pieceDiv.style.backgroundPosition = `${-(piece % 4) * 100}px ${-Math.floor(piece / 4) * 100}px`;
+
+        pieceDiv.dataset.index = piece; // Store the original index
+
+        // Add click event listener to each piece
+        pieceDiv.addEventListener("click", () => handlePieceClick(pieceDiv));
+
+        // Append the piece to the puzzle container
+        puzzleContainer.appendChild(pieceDiv);
+    });
+}
+
 
 
