@@ -260,19 +260,20 @@ document.getElementById('startGameButton').addEventListener('click', function() 
 
 function updateHighScores(name, timeElapsed) {
     let highScores = JSON.parse(localStorage.getItem(highScoresKey)) || [];
+    
+    // Add the new score to the list
     highScores.push({ name: name, time: timeElapsed });
 
-    // Sort and slice to keep only the top 3
+    // Sort high scores by time (ascending) and keep only the top 3 scores
     highScores.sort((a, b) => a.time - b.time);
-    highScores = highScores.slice(0, 3); // Keep top 3 scores
+    highScores = highScores.slice(0, 3);
 
-    // Save to localStorage
+    // Save updated high scores to localStorage
     localStorage.setItem(highScoresKey, JSON.stringify(highScores));
 
-    // Update the displayed high scores
-    displayHighScores();
+    // Display the high scores in the high scores container
+    displayHighScores(document.getElementById("highScoresContainer"));
 }
-
 
 
 function displayHighScores(container) {
@@ -303,11 +304,10 @@ function displayHighScores(container) {
         `;
     });
 
-    container.innerHTML = ''; // Clear existing content
+    container.innerHTML = ''; // Clear existing content before appending
     container.appendChild(highScoresTable);
     container.classList.remove('hidden');
 }
-
 
 
 function toggleScoreTable() {
