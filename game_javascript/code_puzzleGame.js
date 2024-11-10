@@ -26,11 +26,12 @@ startGameButton.addEventListener("click", () => {
     document.getElementById("pauseGameButton").classList.remove("hidden");
     document.getElementById('backToStartButton').style.display = 'block';
 
+    // Set up the game to start and the timer to begin on the first move
     isGameStarted = true; // Enable piece clicks
+    isTimerStarted = false; // Timer will start on first piece click
 
     // Set the reference image source to the puzzle image
     document.getElementById('referenceImage').src = randomImage;
-
 });
 
 
@@ -401,7 +402,7 @@ function clearHighScores() {
 function restartGame() {
     // Clear the puzzle container to remove all pieces
     const puzzleContainer = document.getElementById("puzzle-container");
-    puzzleContainer.innerHTML = '';  // This will remove all current puzzle pieces
+    puzzleContainer.innerHTML = '';  // Remove all current puzzle pieces
 
     // Reset the puzzle pieces array and shuffle it again
     puzzlePieces = [...Array(16).keys()];  // Reset to the original set of 16 puzzle pieces
@@ -412,18 +413,16 @@ function restartGame() {
     isTimerStarted = false;  // Reset timer flag
     isGameStarted = false;  // Reset game start flag
 
+    // Reset the timer display to 0
+    updateTimerDisplay(); // Update the display without starting the timer
+    stopTimer(); // Make sure the timer is stopped
+
     // Initialize the puzzle again by creating new puzzle pieces
     initializePuzzle();
 
-    // Hide the restart button and start the game again
-    document.getElementById('restartButton').style.display = 'none';
-
-    // Show the start button and allow to restart
+    // Show the start button and allow the game to be started again
     startGameButton.style.display = 'block';
-
-    // Reset the timer to 0
-    stopTimer();
-    startTimer();
+    document.getElementById('pauseGameButton').classList.add('hidden');
 
     // Remove the congratulatory message
     const congratulatoryMessage = document.getElementById('draggableMessage');
@@ -431,7 +430,6 @@ function restartGame() {
         congratulatoryMessage.remove(); // Remove the message from the DOM
     }
 }
-
 
 
 function initializePuzzle() {
