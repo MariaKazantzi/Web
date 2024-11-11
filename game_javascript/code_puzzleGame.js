@@ -18,6 +18,9 @@ const overlay = document.getElementById('overlay');
 
 const startGameButton = document.getElementById("startGameButton");
 
+// Set the reference image source to the puzzle image
+document.getElementById('referenceImage').src = randomImage;
+
 startGameButton.addEventListener("click", () => {
     // Hide the "Start Game" button
     startGameButton.style.display = "none";
@@ -29,9 +32,6 @@ startGameButton.addEventListener("click", () => {
     // Set up the game to start and the timer to begin on the first move
     isGameStarted = true; // Enable piece clicks
     isTimerStarted = false; // Timer will start on first piece click
-
-    // Set the reference image source to the puzzle image
-    document.getElementById('referenceImage').src = randomImage;
 });
 
 
@@ -242,7 +242,6 @@ function checkForCompletion() {
     
 }
 
-
 let pauseTimeouts = []; // Array to store active timeouts for unflipping cards
 
 // Add the event listener to toggle pause
@@ -276,7 +275,6 @@ function updateHighScores(name, timeElapsed) {
     displayHighScores(document.getElementById("highScoresContainer"));
 }
 
-
 function displayHighScores(container) {
     const highScores = JSON.parse(localStorage.getItem(highScoresKey)) || [];
 
@@ -309,7 +307,6 @@ function displayHighScores(container) {
     container.appendChild(highScoresTable);
     container.classList.remove('hidden');
 }
-
 
 function toggleScoreTable() {
     // Check if the high scores message already exists
@@ -399,6 +396,8 @@ function clearHighScores() {
     tbody.innerHTML = ''; // Clear the table body
 }
 
+let currentPuzzleImage = '';
+
 function restartGame() {
     // Clear the puzzle container to remove all pieces
     const puzzleContainer = document.getElementById("puzzle-container");
@@ -417,6 +416,12 @@ function restartGame() {
     updateTimerDisplay(); // Update the display without starting the timer
     stopTimer(); // Make sure the timer is stopped
 
+    // Select a new random image each time the puzzle is initialized
+    currentPuzzleImage = dogImages[Math.floor(Math.random() * dogImages.length)];
+
+    // Set the reference image to the new puzzle image
+    document.getElementById('referenceImage').src = currentPuzzleImage;
+
     // Initialize the puzzle again by creating new puzzle pieces
     initializePuzzle();
 
@@ -433,13 +438,7 @@ function restartGame() {
 
 
 function initializePuzzle() {
-
-    // Select a new random image each time the puzzle is initialized
-    const randomImage = dogImages[Math.floor(Math.random() * dogImages.length)];
-
-    // Set the reference image to the new puzzle image
-    document.getElementById('referenceImage').src = randomImage;
-    
+    // Use the previously set `currentPuzzleImage` to generate the puzzle pieces
     const puzzleContainer = document.getElementById("puzzle-container");
 
     // Loop through the puzzle pieces and create each piece
@@ -448,7 +447,7 @@ function initializePuzzle() {
         pieceDiv.classList.add("puzzle-piece");
 
         // Set up the background image and position
-        pieceDiv.style.backgroundImage = `url('${randomImage}')`;
+        pieceDiv.style.backgroundImage = `url('${currentPuzzleImage}')`;
         pieceDiv.style.backgroundPosition = `${-(piece % 4) * 100}px ${-Math.floor(piece / 4) * 100}px`;
 
         pieceDiv.dataset.index = piece; // Store the original index
