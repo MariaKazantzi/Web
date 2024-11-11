@@ -433,6 +433,13 @@ function restartGame() {
 
 
 function initializePuzzle() {
+
+    // Select a new random image each time the puzzle is initialized
+    const randomImage = dogImages[Math.floor(Math.random() * dogImages.length)];
+
+    // Set the reference image to the new puzzle image
+    document.getElementById('referenceImage').src = randomImage;
+    
     const puzzleContainer = document.getElementById("puzzle-container");
 
     // Loop through the puzzle pieces and create each piece
