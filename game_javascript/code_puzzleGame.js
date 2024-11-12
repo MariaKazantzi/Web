@@ -34,6 +34,8 @@ startGameButton.addEventListener("click", () => {
     isTimerStarted = false; // Timer will start on first piece click
 });
 
+// clear scores
+// clearHighScores();
 
 
 puzzlePieces.forEach((piece) => {
@@ -469,5 +471,14 @@ function initializePuzzle() {
     });
 }
 
-
+function clearHighScores() {
+    // Remove the high scores from localStorage
+    localStorage.removeItem(highScoresKey);
+    
+    // Clear the high scores display
+    const highScoresContainer = document.getElementById("highScoresContainer");
+    if (highScoresContainer) {
+        highScoresContainer.innerHTML = ''; // Empty the content of the container
+    }
+}
 
