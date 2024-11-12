@@ -152,6 +152,8 @@ function togglePause() {
     }
 }
 
+let isScoreSaved = false;
+
 function checkForCompletion() {
     let highScores = JSON.parse(localStorage.getItem(highScoresKey)) || [];
 
@@ -223,12 +225,17 @@ function checkForCompletion() {
         // Handle saving the score if the player enters a name
         if (shouldAskForName) {
             document.getElementById('saveScoreButton').addEventListener('click', () => {
-                const name = document.getElementById('nameInput').value;
-                if (name) {
-                    updateHighScores(name, timeElapsed); // Save the high score
-                    displayHighScores(document.getElementById("highScoresContainer")); // Update displayed scores
+                if (!isScoreSaved) { // Check if score has already been saved
+                    const name = document.getElementById('nameInput').value;
+                    if (name) {
+                        updateHighScores(name, timeElapsed); // Save the high score
+                        displayHighScores(document.getElementById("highScoresContainer")); // Update displayed scores
+                        isScoreSaved = true; // Set flag to true to prevent additional saves
+                    } else {
+                        alert("Please enter a name to save your score.");
+                    }
                 } else {
-                    alert("Please enter a name to save your score.");
+                    alert("Score already saved!"); // Optional alert to inform player
                 }
             });
         }
@@ -421,6 +428,8 @@ function restartGame() {
 
     // Set the reference image to the new puzzle image
     document.getElementById('referenceImage').src = currentPuzzleImage;
+
+    isScoreSaved = false;
 
     // Initialize the puzzle again by creating new puzzle pieces
     initializePuzzle();
