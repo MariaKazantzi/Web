@@ -1,16 +1,11 @@
 const gameId = "dogPuzzleGame"; // Set a unique identifier for each game type
 const highScoresKey = `highScores_${gameId}`; // Unique key for this specific game’s high scores
-
 const dogImages = ['images/11.jpg', 'images/12.jpg', 'images/13.jpg', 'images/14.jpg', 'images/15.jpg','images/16.jpg', 'images/17.jpg', 'images/18.jpg', 'images/19.jpg', 'images/20.jpg'];
-
 const randomImage = dogImages[Math.floor(Math.random() * dogImages.length)];
 
-// JavaScript array to hold shuffled positions
 let puzzlePieces = [...Array(16).keys()]; // For a 4x4 grid
 puzzlePieces = puzzlePieces.sort(() => Math.random() - 0.5);
-
 let selectedPiece = null; // To keep track of the first selected piece
-
 let isGameStarted = false; // Track if the game has started
 
 // Get the overlay element
@@ -36,7 +31,6 @@ startGameButton.addEventListener("click", () => {
 
 // clear scores
 // clearHighScores();
-
 
 puzzlePieces.forEach((piece) => {
     const pieceDiv = document.createElement("div");
@@ -93,7 +87,6 @@ function handlePieceClick(piece) {
         checkForCompletion();
     }
 }
-
 
 // Function to swap two pieces
 function swapPieces(piece1, piece2) {
@@ -446,7 +439,6 @@ function restartGame() {
         congratulatoryMessage.remove(); // Remove the message from the DOM
     }
 }
-
 
 function initializePuzzle() {
     // Use the previously set `currentPuzzleImage` to generate the puzzle pieces
