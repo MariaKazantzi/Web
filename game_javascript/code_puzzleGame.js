@@ -99,6 +99,9 @@ function swapPieces(piece1, piece2) {
     const tempIndex = piece1.dataset.index;
     piece1.dataset.index = piece2.dataset.index;
     piece2.dataset.index = tempIndex;
+
+    // Increment the swap counter
+    swapCount++;
 }
 
 let timer; // Timer variable
@@ -195,6 +198,7 @@ function checkForCompletion() {
             <div style="text-align: center; padding: 20px;">
                 <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
                 <p>You completed the puzzle in ${timeElapsed} seconds!</p>
+                <p>Total Swaps: ${swapCount}</p>
                 ${shouldAskForName ? ` 
                 <label for="nameInput" class="block text-gray-700 text-sm font-bold mb-2">Enter your name:</label>
                 <input id="nameInput" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Your Name">
@@ -401,6 +405,10 @@ function clearHighScores() {
 let currentPuzzleImage = '';
 
 function restartGame() {
+
+    // Reset the swap count
+    swapCount = 0;
+
     // Clear the puzzle container to remove all pieces
     const puzzleContainer = document.getElementById("puzzle-container");
     puzzleContainer.innerHTML = '';  // Remove all current puzzle pieces
@@ -473,4 +481,6 @@ function clearHighScores() {
         highScoresContainer.innerHTML = ''; // Empty the content of the container
     }
 }
+
+let swapCount = 0; // Track the number of swaps
 
