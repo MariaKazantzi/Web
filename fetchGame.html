@@ -21,7 +21,7 @@
       border: 2px solid #000;
       overflow: hidden;
     }
-    #dogB, #dogA {
+    #dogB, #dogA, #dogBa, #dogR {
         position: absolute;
         bottom: 20px;
         left: 20px;
@@ -44,12 +44,17 @@
   <div id="game-container">
     <img id="dogB" src="images\fetch\dog_before.jpg" alt="DogB">
     <img id="dogA" src="images\fetch\dog_after.jpg" alt="DogA">
+    <img id="dogR" src="images\fetch\dog_rest.jpg" alt="DogR">
+    <img id="dogBa" src="images\fetch\dog_back.jpg" alt="DogBa">
     <img id="ball" src="images\fetch\ball.jpg" alt="Ball">
   </div>
 
   <script>
     const dogB = document.getElementById("dogB"); // Dog before fetching
     const dogA = document.getElementById("dogA"); // Dog after fetching
+    const dogR = document.getElementById("dogR"); // Dog resting
+    const dogBa = document.getElementById("dogBa"); // Dog after fetching back
+
     const ball = document.getElementById("ball");
     const container = document.getElementById("game-container");
 
@@ -65,6 +70,8 @@
       
           // Show dogB and hide dogA while running to the ball
           dogB.style.display = "block";
+          dogBa.style.display = "block";
+          dogR.style.display = "block";
           dogA.style.display = "none";
       
           // Move the dog to the ball's position
