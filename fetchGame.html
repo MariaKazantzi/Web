@@ -21,13 +21,17 @@
       border: 2px solid #000;
       overflow: hidden;
     }
-    #dog {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      width: 80px;
-      transition: transform 0.5s;
+    #dogB, #dogA {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        width: 80px;
+        transition: transform 0.5s;
     }
+    #dogA {
+        display: none; /* Hide dogA initially */
+    }
+    
     #ball {
       position: absolute;
       bottom: 20px;
@@ -38,38 +42,62 @@
 </head>
 <body>
   <div id="game-container">
-    <img id="dog" src="dog.png" alt="Dog">
-    <img id="ball" src="ball.png" alt="Ball">
+    <img id="dogB" src="images\fetch\dog_before.jpg" alt="DogB">
+    <img id="dogA" src="images\fetch\dog_after.jpg" alt="DogA">
+    <img id="ball" src="images\fetch\ball.jpg" alt="Ball">
   </div>
 
   <script>
-    const dog = document.getElementById("dog");
+    const dogB = document.getElementById("dogB"); // Dog before fetching
+    const dogA = document.getElementById("dogA"); // Dog after fetching
     const ball = document.getElementById("ball");
     const container = document.getElementById("game-container");
 
     let ballThrown = false;
 
     container.addEventListener("click", (e) => {
-      if (!ballThrown) {
-        // Move the ball to where the user clicked
-        const clickX = e.clientX - container.offsetLeft;
-        ball.style.left = `${clickX - 20}px`;
-
-        ballThrown = true;
-
-        // Move the dog to the ball's position
-        setTimeout(() => {
-          dog.style.transform = `translateX(${clickX - 40}px)`;
-
-          // Dog picks up the ball
+        if (!ballThrown) {
+          // Move the ball to where the user clicked
+          const clickX = e.clientX - container.offsetLeft;
+          ball.style.left = `${clickX - 20}px`;
+      
+          ballThrown = true;
+      
+          // Show dogB and hide dogA while running to the ball
+          dogB.style.display = "block";
+          dogA.style.display = "none";
+      
+          // Move the dog to the ball's position
           setTimeout(() => {
-            ball.style.left = `${20}px`;
-            dog.style.transform = `translateX(0)`;
-            ballThrown = false;
-          }, 2000);
-        }, 1000);
-      }
-    });
+            dogB.style.transform = `translateX(${clickX - 40}px)`;
+      
+            // Dog picks up the ball
+            setTimeout(() => {
+              // Show dogA and hide dogB while returning
+              dogB.style.display = "none";
+              dogA.style.display = "block";
+      
+              // Start dogA at the ball's position
+              dogA.style.transform = `translateX(${clickX - 40}px)`;
+      
+              // Move dogA back to the starting position
+              setTimeout(() => {
+                dogA.style.transform = `translateX(0)`; // Move back to start
+      
+                // Reset ball and dog positions for next throw
+                setTimeout(() => {
+                  ball.style.left = `${20}px`; // Reset ball to starting position
+                  dogA.style.display = "none"; // Hide dogA
+                  dogB.style.display = "block"; // Show dogB for the next fetch
+                  dogB.style.transform = `translateX(0)`; // Reset dogB to starting position
+                  ballThrown = false; // Allow another throw
+                }, 1000); // Duration for dog returning to start
+              }, 10); // Delay to start moving back smoothly
+            }, 1000); // Wait for dog to reach the ball
+          }, 1000); // Duration for dog running to the ball
+        }
+      });
+      
   </script>
 </body>
 </html>
