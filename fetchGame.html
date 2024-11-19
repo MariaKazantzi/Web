@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Game</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f8ff;
+      margin: 0;
+    }
+    #game-container {
+      position: relative;
+      width: 800px;
+      height: 400px;
+      background: lightgreen;
+      border: 2px solid #000;
+      overflow: hidden;
+    }
+    #dog {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 80px;
+      transition: transform 0.5s;
+    }
+    #ball {
+      position: absolute;
+      bottom: 20px;
+      width: 40px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <img id="dog" src="dog.png" alt="Dog">
+    <img id="ball" src="ball.png" alt="Ball">
+  </div>
+
+  <script>
+    const dog = document.getElementById("dog");
+    const ball = document.getElementById("ball");
+    const container = document.getElementById("game-container");
+
+    let ballThrown = false;
+
+    container.addEventListener("click", (e) => {
+      if (!ballThrown) {
+        // Move the ball to where the user clicked
+        const clickX = e.clientX - container.offsetLeft;
+        ball.style.left = `${clickX - 20}px`;
+
+        ballThrown = true;
+
+        // Move the dog to the ball's position
+        setTimeout(() => {
+          dog.style.transform = `translateX(${clickX - 40}px)`;
+
+          // Dog picks up the ball
+          setTimeout(() => {
+            ball.style.left = `${20}px`;
+            dog.style.transform = `translateX(0)`;
+            ballThrown = false;
+          }, 2000);
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>
