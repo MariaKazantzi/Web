@@ -21,15 +21,23 @@
       border: 2px solid #000;
       overflow: hidden;
     }
-    #dogB, #dogA, #dogBa, #dogR {
+    #dogB, #dogA, #dogR, #dogBa {
         position: absolute;
         bottom: 20px;
         left: 20px;
         width: 80px;
         transition: transform 0.5s;
     }
+    #dogB {
+        display: none; /* Hide dogB initially */
+    }
+
     #dogA {
-        display: none; /* Hide dogA initially */
+      display: none; /* Hide dogA initially */
+    }
+
+    #dogBa {
+    display: none; /* Hide dogBa initially */
     }
     
     #ball {
@@ -68,10 +76,10 @@
       
           ballThrown = true;
       
-          // Show dogB and hide dogA while running to the ball
+          // Show dogB while running to the ball
           dogB.style.display = "block";
-          dogBa.style.display = "block";
-          dogR.style.display = "block";
+          dogBa.style.display = "none";
+          dogR.style.display = "none";
           dogA.style.display = "none";
       
           // Move the dog to the ball's position
@@ -82,6 +90,8 @@
             setTimeout(() => {
               // Show dogA and hide dogB while returning
               dogB.style.display = "none";
+              dogBa.style.display = "none";
+              dogR.style.display = "none";
               dogA.style.display = "block";
       
               // Start dogA at the ball's position
@@ -90,12 +100,16 @@
               // Move dogA back to the starting position
               setTimeout(() => {
                 dogA.style.transform = `translateX(0)`; // Move back to start
-      
+                     
                 // Reset ball and dog positions for next throw
                 setTimeout(() => {
                   ball.style.left = `${20}px`; // Reset ball to starting position
+                  
                   dogA.style.display = "none"; // Hide dogA
-                  dogB.style.display = "block"; // Show dogB for the next fetch
+                  dogB.style.display = "none"; 
+                  dogR.style.display = "none";
+                  dogBa.style.display = "block";
+
                   dogB.style.transform = `translateX(0)`; // Reset dogB to starting position
                   ballThrown = false; // Allow another throw
                 }, 1000); // Duration for dog returning to start
