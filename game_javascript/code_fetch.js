@@ -69,4 +69,5 @@ document.getElementById('backToStartButton').addEventListener('click', function(
 // When the game starts, show the Back to Start button
 document.getElementById('startGameButton').addEventListener('click', function() {
     document.getElementById('backToStartButton').style.display = 'block';
+    document.getElementById('startGameButton').style.display = 'none';
 });

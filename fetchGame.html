@@ -4,51 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fetch Game</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f0f8ff;
-      margin: 0;
-    }
-    #game-container {
-      position: relative;
-      width: 800px;
-      height: 400px;
-      background: lightgreen;
-      border: 2px solid #000;
-      overflow: hidden;
-    }
-    #dogB, #dogA, #dogR, #dogBa {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        width: 80px;
-        transition: transform 0.5s;
-    }
-    #dogB {
-        display: none; /* Hide dogB initially */
-    }
-
-    #dogA {
-      display: none; /* Hide dogA initially */
-    }
-
-    #dogBa {
-    display: none; /* Hide dogBa initially */
-    }
-    
-    #ball {
-      position: absolute;
-      bottom: 20px;
-      width: 40px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
 </head>
-<body>
+
+<body class="p-4 sm:p-6 lg:p-10 flex flex-col items-center justify-center h-screen bg-gray-100">
 
   <div id="game-container">
     <img id="dogB" src="images\fetch\dog_before.jpg" alt="DogB">

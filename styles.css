@@ -161,7 +161,39 @@ body {
 
 /* fetch game style */
 
+#game-container {
+    position: relative;
+    width: 1000px;
+    height: 400px;
+    background: lightgreen;
+    border: 2px solid #000;
+    overflow: hidden;
+}
+#dogB, #dogA, #dogR, #dogBa {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 80px;
+      transition: transform 0.5s;
+}
+#dogB {
+    display: none; /* Hide dogB initially */
+}
 
+#dogA {
+display: none; /* Hide dogA initially */
+}
+
+#dogBa {
+display: none; /* Hide dogBa initially */
+}
+
+#ball {
+position: absolute;
+bottom: 20px;
+width: 40px;
+cursor: pointer;
+}
 
 
 
