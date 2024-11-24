@@ -7,8 +7,12 @@ const ball = document.getElementById("ball");
 const container = document.getElementById("game-container");
 
 let ballThrown = false;
+let gameStarted = false; // Flag to control the game state
 
 container.addEventListener("click", (e) => {
+
+    if (!gameStarted) return; // Prevent actions if game hasn't started
+
     if (!ballThrown) {
         // Move the ball to where the user clicked
         const clickX = e.clientX - container.offsetLeft;
@@ -68,6 +72,7 @@ document.getElementById('backToStartButton').addEventListener('click', function(
 
 // When the game starts, show the Back to Start button
 document.getElementById('startGameButton').addEventListener('click', function() {
+    gameStarted = true; // Allow the game to start
     document.getElementById('backToStartButton').style.display = 'block';
     document.getElementById('startGameButton').style.display = 'none';
 });
