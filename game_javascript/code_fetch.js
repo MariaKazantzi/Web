@@ -8,10 +8,13 @@ const container = document.getElementById("game-container");
 
 let ballThrown = false;
 let gameStarted = false; // Flag to control the game state
+let dogResting = false; // To track if the dog is resting
+
+let stamina = 90;
 
 container.addEventListener("click", (e) => {
 
-    if (!gameStarted) return; // Prevent actions if game hasn't started
+    if (!gameStarted || dogResting) return; // Prevent actions if game hasn't started
 
     if (!ballThrown) {
         // Move the ball to where the user clicked
@@ -61,6 +64,11 @@ container.addEventListener("click", (e) => {
             }, 1000); // Wait for dog to reach the ball
         }, 1000); // Duration for dog running to the ball
     }
+
+    setTimeout(() => {
+        decreaseStamina(); // Check if dog needs rest after completing a fetch
+        ballThrown = false; // Allow another throw
+    }, 2000); // Delay to simulate the dog completing fetch
 });
 
 
@@ -76,3 +84,26 @@ document.getElementById('startGameButton').addEventListener('click', function() 
     document.getElementById('backToStartButton').style.display = 'block';
     document.getElementById('startGameButton').style.display = 'none';
 });
+
+
+function decreaseStamina() {
+    stamina -= 30; // Decrease stamina with each throw
+
+    if (stamina <= 0) { // Rest if stamina is depleted
+        dogResting = true; // Dog is resting
+        alert("The dog needs to rest for 5 seconds!");
+
+        setTimeout(() => {
+            // After 5 seconds, reset the dog's state
+            stamina = 90; // Reset stamina
+            dogResting = false; // Allow fetching again
+
+            dogR.style.display = "block";
+            dogBa.style.display = "none";
+            dogA.style.display = "none";
+            dogB.style.display = "none";
+
+        }, 5000); // 5 seconds rest
+    }
+}
+
