@@ -163,7 +163,7 @@ body {
 
 #game-container {
     position: relative;
-    width: 1000px;
+    width: 1500px;
     height: 400px;
     background: lightgreen;
     border: 2px solid #000;
@@ -173,7 +173,7 @@ body {
       position: absolute;
       bottom: 20px;
       left: 20px;
-      width: 80px;
+      width: 190px;
       transition: transform 0.5s;
 }
 #dogB {
