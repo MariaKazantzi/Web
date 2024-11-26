@@ -91,7 +91,7 @@ function decreaseStamina() {
 
     if (stamina <= 0) { // Rest if stamina is depleted
         dogResting = true; // Dog is resting
-        alert("The dog needs to rest for 5 seconds!");
+        alert("Nugget needs to rest for 5 seconds!");
 
         setTimeout(() => {
             // After 5 seconds, reset the dog's state
