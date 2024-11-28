@@ -199,8 +199,8 @@ cursor: pointer;
 
 #maze {
 display: grid;
-grid-template-columns: repeat(8, 50px); /* Match the maze grid size */
-grid-template-rows: repeat(8, 50px);
+grid-template-columns: repeat(10, 50px); /* Match the maze grid size */
+grid-template-rows: repeat(10, 50px);
 position: relative; /* Required for absolute positioning of child elements */
 }
 
