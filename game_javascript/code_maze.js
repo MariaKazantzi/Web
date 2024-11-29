@@ -12,6 +12,9 @@ document.getElementById('startGameButton').addEventListener('click', function() 
   document.getElementById('startGameButton').style.display = 'none';
 });
 
+const CELL_SIZE = 50; // Size of each cell in pixels
+
+
 const maze = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
