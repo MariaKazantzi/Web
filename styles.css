@@ -199,9 +199,12 @@ cursor: pointer;
 
 #maze {
 display: grid;
-grid-template-columns: repeat(10, 50px); /* Match the maze grid size */
-grid-template-rows: repeat(10, 50px);
-position: relative; /* Required for absolute positioning of child elements */
+grid-template-columns: repeat(10, 50px); /* Matches maze width */
+grid-template-rows: repeat(10, 50px);   /* Matches maze height */
+position: relative; /* Ensures child elements align to this container */
+width: 500px;       /* 10 columns × 50px */
+height: 500px;      /* 10 rows × 50px */
+margin: auto;       /* Optional: center the maze in the viewport */
 }
 
 .cell {
@@ -217,15 +220,16 @@ background-color: black;
     background-color: white;
   }
   
-#player{
-width: 50px;
-height: 50px;
-position: absolute; /* Allows movement */
+#player {
+width: 50px; /* Matches CELL_SIZE */
+height: 50px; /* Matches CELL_SIZE */
+position: absolute; /* Ensures movement inside the maze */
 transition: transform 0.2s; /* Smooth movement */
 background-image: url('./images/maze/nugget.png');
-background-size: cover; /* Ensures the image fits the element */
+background-size: cover; /* Ensure the image scales correctly */
 background-position: center;
 }
+  
 
 #treat {
 width: 50px;
