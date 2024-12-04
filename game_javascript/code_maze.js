@@ -95,5 +95,28 @@ function createMaze() {
   });
 }
 
+function startTimer() {
+  // Only start the timer if it isn't already running
+  if (!timerInterval) {
+      timerInterval = setInterval(() => {
+          timeElapsed++;
+          const minutes = Math.floor(timeElapsed / 60);
+          const seconds = timeElapsed % 60;
+
+          // Format minutes and seconds to display as 00:00
+          const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+          // Update the displayed time
+          document.getElementById('timer').textContent = `Time: ${formattedTime}`;
+      }, 1000);
+  }
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null; // Clear the reference to the timer interval
+}
+
+
 
 
