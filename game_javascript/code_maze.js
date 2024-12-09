@@ -1,21 +1,5 @@
-
-// Event listener for the Back to Start button
-document.getElementById('backToStartButton').addEventListener('click', function() {
-  // Redirect to initial.html
-  window.location.href = 'initial_page.html';
-});
-
 let timerInterval = null; // Holds the reference to the timer interval
 let timeElapsed = 0; // Tracks the elapsed time in seconds
-
-
-// When the game starts, show the Back to Start button
-document.getElementById('startGameButton').addEventListener('click', function() {
-  gameStarted = true; // Allow the game to start
-  document.getElementById('backToStartButton').style.display = 'block';
-  document.getElementById('startGameButton').style.display = 'none';
-  startTimer();
-});
 
 const CELL_SIZE = 50; // Size of each cell in pixels
 
@@ -123,6 +107,19 @@ function stopTimer() {
   timerInterval = null; // Clear the reference to the timer interval
 }
 
+// When the game starts, show the Back to Start button
+document.getElementById('startGameButton').addEventListener('click', function() {
+  gameStarted = true; // Allow the game to start
+  document.getElementById('backToStartButton').style.display = 'block';
+  document.getElementById('startGameButton').style.display = 'none';
+  startTimer();
+});
+
+// Event listener for the Back to Start button
+document.getElementById('backToStartButton').addEventListener('click', function() {
+  // Redirect to initial.html
+  window.location.href = 'initial_page.html';
+});
 
 
 
