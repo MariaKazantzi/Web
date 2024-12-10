@@ -204,7 +204,7 @@ grid-template-rows: repeat(10, 50px);   /* Matches maze height */
 position: relative; /* Ensures child elements align to this container */
 width: 500px;       /* 10 columns × 50px */
 height: 500px;      /* 10 rows × 50px */
-margin: auto;       /* Optional: center the maze in the viewport */
+margin: 0 auto;       /* Optional: center the maze in the viewport */
 }
 
 .cell {

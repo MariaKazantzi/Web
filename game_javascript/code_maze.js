@@ -28,7 +28,28 @@ maze.forEach((row) => {
   });
 });
 
-let player = { x: 1, y: 1 }; // Player starting position (grid cell [1, 1])
+// Find the first empty cell (top-left corner of the maze that is 0)
+function findFirstEmptyCell(maze) {
+  for (let y = 0; y < maze.length; y++) {
+      for (let x = 0; x < maze[y].length; x++) {
+          if (maze[y][x] === 0) {
+              return { x, y }; // Return the coordinates of the first empty cell
+          }
+      }
+  }
+  return null; // No empty cell found
+}
+
+// Place the player at the first empty cell
+let player = findFirstEmptyCell(maze);
+if (player) {
+  setPosition(playerDiv, player.x, player.y);
+} else {
+  console.error("No empty cell found in the maze for the player.");
+}
+
+
+//let player = { x: 1, y: 1 }; // Player starting position (grid cell [1, 1])
 let treat = { x: 6, y: 6 }; // Treat position (grid cell [6, 6])
 
 setPosition(playerDiv, player.x, player.y);
@@ -37,9 +58,18 @@ setPosition(treatDiv, treat.x, treat.y);
 
 // Set player or treat position using CSS transform
 function setPosition(element, x, y) {
-  element.style.position = "absolute";  // Use absolute positioning within the maze container
-  element.style.transform = `translate(${x * CELL_SIZE}px, ${y * CELL_SIZE}px)`; // Position based on grid cell size
+  const mazeRect = mazeDiv.getBoundingClientRect(); // Get maze's position in the viewport
+  const mazeOffsetX = mazeRect.left; // Horizontal offset
+  const mazeOffsetY = mazeRect.top;  // Vertical offset
+
+  // Apply the offset when setting the position
+  element.style.position = "absolute";
+  element.style.left = `${mazeOffsetX + x * CELL_SIZE}px`;
+  element.style.top = `${mazeOffsetY + y * CELL_SIZE}px`;
 }
+
+
+
 
 
 setPosition(playerDiv, player.x, player.y);
