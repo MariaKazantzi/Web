@@ -48,12 +48,35 @@ if (player) {
   console.error("No empty cell found in the maze for the player.");
 }
 
+function findRandomEmptyCell(maze, player) {
+  const emptyCells = [];
 
-//let player = { x: 1, y: 1 }; // Player starting position (grid cell [1, 1])
-let treat = { x: 6, y: 6 }; // Treat position (grid cell [6, 6])
+  // Collect all empty cells
+  maze.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell === 0 && !(x === player.x && y === player.y)) {
+        emptyCells.push({ x, y }); // Add the cell to the list
+      }
+    });
+  });
 
-setPosition(playerDiv, player.x, player.y);
-setPosition(treatDiv, treat.x, treat.y);
+  // Pick a random empty cell
+  if (emptyCells.length > 0) {
+    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+    return emptyCells[randomIndex];
+  }
+  return null; // Return null if no empty cells are found
+}
+
+
+// Place the treat in a random empty cell
+let newTreat = findRandomEmptyCell(maze, player);
+if (newTreat) {
+  treat = newTreat; // Update the treat's position
+  setPosition(treatDiv, treat.x, treat.y); // Update treat's position visually
+} else {
+  console.error("No empty cell found for the treat.");
+}
 
 
 // Set player or treat position using CSS transform
@@ -67,9 +90,6 @@ function setPosition(element, x, y) {
   element.style.left = `${mazeOffsetX + x * CELL_SIZE}px`;
   element.style.top = `${mazeOffsetY + y * CELL_SIZE}px`;
 }
-
-
-
 
 
 setPosition(playerDiv, player.x, player.y);
