@@ -108,6 +108,9 @@ document.addEventListener("keydown", (event) => {
   // Check if player reaches the treat
   if (player.x === treat.x && player.y === treat.y) {
     alert("Congratulations! Your dog got the treat!");
+
+     // Hide the treat
+    treatDiv.style.display = "none";
     stopTimer();
   }
 });
