@@ -95,9 +95,12 @@ function setPosition(element, x, y) {
 setPosition(playerDiv, player.x, player.y);
 setPosition(treatDiv, treat.x, treat.y);
 
+let treatsCollected = 0; // Counter for collected treats
+
 document.addEventListener("keydown", (event) => {
   const { x, y } = player;
 
+  // Move the player if the target cell is free
   if (event.key === "ArrowUp" && maze[y - 1][x] === 0) player.y--;
   if (event.key === "ArrowDown" && maze[y + 1][x] === 0) player.y++;
   if (event.key === "ArrowLeft" && maze[y][x - 1] === 0) player.x--;
@@ -107,13 +110,29 @@ document.addEventListener("keydown", (event) => {
 
   // Check if player reaches the treat
   if (player.x === treat.x && player.y === treat.y) {
-    alert("Congratulations! Your dog got the treat!");
+    treatsCollected++; // Increment the counter
 
-     // Hide the treat
+    // Hide the treat
     treatDiv.style.display = "none";
-    stopTimer();
+
+    if (treatsCollected < 10) {
+      // Find a new random position for the treat
+      const newTreatPosition = findRandomEmptyCell(maze, player);
+
+      if (newTreatPosition) {
+        treat = newTreatPosition; // Update the treat position
+        setPosition(treatDiv, treat.x, treat.y); // Update its visual position
+        treatDiv.style.display = "block"; // Show the treat again
+      } else {
+        console.error("No empty position available to place a new treat.");
+      }
+    } else {
+      console.log("All treats collected! Game over or proceed with next logic.");
+      stopTimer(); // Stop the game timer if applicable
+    }
   }
 });
+
 
 function updatePlayerPosition() {
   setPosition(playerDiv, player.x, player.y);
