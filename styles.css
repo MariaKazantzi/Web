@@ -198,20 +198,20 @@ cursor: pointer;
 /* maze game style */
 
 #maze {
-display: grid;
-grid-template-columns: repeat(10, 50px); /* Matches maze width */
-grid-template-rows: repeat(10, 50px);   /* Matches maze height */
-position: relative; /* Ensures child elements align to this container */
-width: 500px;       /* 10 columns × 50px */
-height: 500px;      /* 10 rows × 50px */
-margin: 0 auto;       /* Optional: center the maze in the viewport */
-overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(var(--columns, 10), 1fr); /* Dynamic columns */
+    grid-template-rows: repeat(var(--rows, 10), 1fr);      /* Dynamic rows */
+    position: relative;
+    width: 100vmin;   /* Fits to the smaller screen dimension */
+    height: 100vmin;  /* Makes it square, based on screen size */
+    margin: 0 auto;
+    overflow: hidden;  
 }
 
 .cell {
-width: 50px;
-height: 50px;
-}
+    width: 100%; /* Automatically adapts to the grid cell size */
+    height: 100%;
+  }
 
 .wall {
 background-color: black;

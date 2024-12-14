@@ -115,7 +115,7 @@ document.addEventListener("keydown", (event) => {
     // Hide the treat
     treatDiv.style.display = "none";
 
-    if (treatsCollected < 10) {
+    if (treatsCollected < 5) {
       // Find a new random position for the treat
       const newTreatPosition = findRandomEmptyCell(maze, player);
 
