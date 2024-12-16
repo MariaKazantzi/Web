@@ -20,6 +20,7 @@ const mazeDiv = document.getElementById("maze");
 const playerDiv = document.getElementById("player");
 const treatDiv = document.getElementById("treat");
 
+
 maze.forEach((row) => {
   row.forEach((cell) => {
     const div = document.createElement("div");
@@ -118,21 +119,27 @@ document.addEventListener("keydown", (event) => {
     if (treatsCollected < 5) {
       // Find a new random position for the treat
       const newTreatPosition = findRandomEmptyCell(maze, player);
+      // Update treat display
+      treatDisplay.textContent = `Treats: ${treatsCollected}/5`;
 
       if (newTreatPosition) {
         treat = newTreatPosition; // Update the treat position
         setPosition(treatDiv, treat.x, treat.y); // Update its visual position
         treatDiv.style.display = "block"; // Show the treat again
+        
       } else {
         console.error("No empty position available to place a new treat.");
       }
     } else {
       console.log("All treats collected! Game over or proceed with next logic.");
+
+      // Update treat display
+      treatDisplay.textContent = `Treats: ${treatsCollected}/5`;
+
       stopTimer(); // Stop the game timer if applicable
     }
   }
 });
-
 
 function updatePlayerPosition() {
   setPosition(playerDiv, player.x, player.y);
@@ -184,13 +191,18 @@ document.getElementById('startGameButton').addEventListener('click', function() 
   gameStarted = true; // Allow the game to start
   document.getElementById('backToStartButton').style.display = 'block';
   document.getElementById('startGameButton').style.display = 'none';
+
+  // Show the treat display
+  const treatDisplay = document.getElementById('treatDisplay');
+  treatDisplay.classList.remove('hidden'); // Remove the 'hidden' class to show the round display
+
   startTimer();
 });
 
 // Event listener for the Back to Start button
 document.getElementById('backToStartButton').addEventListener('click', function() {
   // Redirect to initial.html
-  window.location.href = 'initial_page.html';
+  window.location.href = 'initial_page.html';  
 });
 
 

@@ -199,13 +199,13 @@ cursor: pointer;
 
 #maze {
     display: grid;
-    grid-template-columns: repeat(var(--columns, 10), 1fr); /* Dynamic columns */
-    grid-template-rows: repeat(var(--rows, 10), 1fr);      /* Dynamic rows */
+    grid-template-columns: repeat(var(--columns, 10), 50px); /* Match CELL_SIZE */
+    grid-template-rows: repeat(var(--rows, 10), 50px);      /* Match CELL_SIZE */
     position: relative;
-    width: 100vmin;   /* Fits to the smaller screen dimension */
-    height: 100vmin;  /* Makes it square, based on screen size */
+    width: fit-content; /* Adjust to fit grid content exactly */
+    height: fit-content;
     margin: 0 auto;
-    overflow: hidden;  
+    overflow: hidden;
 }
 
 .cell {
