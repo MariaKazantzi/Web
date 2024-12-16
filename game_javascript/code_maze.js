@@ -49,6 +49,50 @@ if (player) {
   console.error("No empty cell found in the maze for the player.");
 }
 
+function isPathAvailable(maze, start, end) {
+  const directions = [
+    { x: 0, y: -1 }, // Up
+    { x: 0, y: 1 },  // Down
+    { x: -1, y: 0 }, // Left
+    { x: 1, y: 0 },  // Right
+  ];
+
+  const queue = [start];
+  const visited = new Set();
+  visited.add(`${start.x},${start.y}`);
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+
+    // If we've reached the end position, return true
+    if (current.x === end.x && current.y === end.y) {
+      return true;
+    }
+
+    // Explore neighboring cells
+    for (const dir of directions) {
+      const nextX = current.x + dir.x;
+      const nextY = current.y + dir.y;
+
+      // Check if the next position is within bounds, not a wall, and not visited
+      if (
+        nextX >= 0 &&
+        nextX < maze[0].length &&
+        nextY >= 0 &&
+        nextY < maze.length &&
+        maze[nextY][nextX] === 0 &&
+        !visited.has(`${nextX},${nextY}`)
+      ) {
+        queue.push({ x: nextX, y: nextY });
+        visited.add(`${nextX},${nextY}`);
+      }
+    }
+  }
+
+  return false; // No path found
+}
+
+
 function findRandomEmptyCell(maze, player) {
   const emptyCells = [];
 
@@ -61,12 +105,20 @@ function findRandomEmptyCell(maze, player) {
     });
   });
 
-  // Pick a random empty cell
-  if (emptyCells.length > 0) {
-    const randomIndex = Math.floor(Math.random() * emptyCells.length);
-    return emptyCells[randomIndex];
+  // Shuffle the empty cells to randomize selection
+  for (let i = emptyCells.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [emptyCells[i], emptyCells[j]] = [emptyCells[j], emptyCells[i]];
   }
-  return null; // Return null if no empty cells are found
+
+  // Find a valid cell with a path to the player
+  for (const cell of emptyCells) {
+    if (isPathAvailable(maze, player, cell)) {
+      return cell; // Return the first valid cell
+    }
+  }
+
+  return null; // Return null if no valid cells are found
 }
 
 
