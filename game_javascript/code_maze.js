@@ -151,6 +151,10 @@ setPosition(treatDiv, treat.x, treat.y);
 let treatsCollected = 0; // Counter for collected treats
 
 document.addEventListener("keydown", (event) => {
+
+  if(gameStarted){
+    
+  
   const { x, y } = player;
 
   // Move the player if the target cell is free
@@ -190,6 +194,8 @@ document.addEventListener("keydown", (event) => {
 
       stopTimer(); // Stop the game timer if applicable
     }
+  }
+
   }
 });
 
