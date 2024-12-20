@@ -186,13 +186,24 @@ document.addEventListener("keydown", (event) => {
       } else {
         console.error("No empty position available to place a new treat.");
       }
-    } else {
-      console.log("All treats collected! Game over or proceed with next logic.");
-
+    } else if (treatsCollected === 5){
+      
       // Update treat display
       treatDisplay.textContent = `Treats: ${treatsCollected}/5`;
 
-      stopTimer(); // Stop the game timer if applicable
+      // Stop the game timer
+      stopTimer();
+
+      // Calculate final time
+      const minutes = Math.floor(timeElapsed / 60);
+      const seconds = timeElapsed % 60;
+      const finalTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+      // Display a message with the time it took
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = `Congratulations! You collected all treats in ${finalTime}!`;
+      messageDiv.style.display = 'block';
+      
     }
   }
 
