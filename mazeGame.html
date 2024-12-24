@@ -24,21 +24,26 @@
       </button>
     </div>
 
+    <div id="gameContainer" class="relative w-full h-screen flex flex-col items-center">
+    <!-- Status Bar -->
     <div id="statusBar" class="flex justify-center items-center space-x-4 mb-4">
-      <!-- Timer Display -->
-      <div id="timer" class="text-lg">Time: 0 seconds</div>
-  
-      <!-- Treats Display -->
-      <div id="treatDisplay" class="text-lg">Treats: 0/5</div>
-  </div>
+        <div id="timer" class="text-lg">Time: 0 seconds</div>
+        <div id="treatDisplay" class="text-lg">Treats: 0/5</div>
+    </div>
+
+    <!-- Maze -->
+    <div id="maze"></div>
+
+     
+    <div id="player"></div>
+    <div id="treat"></div>
+</div>
   
 
     <div id="message" style="display: none; text-align: center; font-size: 20px; color: green;"></div>
 
 
-    <div id="maze"></div>
-    <div id="player"></div>
-    <div id="treat"></div>
+
 
   
     <!-- Move script tag here -->

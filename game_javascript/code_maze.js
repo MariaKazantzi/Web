@@ -275,5 +275,3 @@ document.getElementById('backToStartButton').addEventListener('click', function(
 
 
 
-
-
