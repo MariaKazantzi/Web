@@ -187,7 +187,6 @@ document.addEventListener("keydown", (event) => {
         console.error("No empty position available to place a new treat.");
       }
     } else if (treatsCollected === 5){
-      
       // Update treat display
       treatDisplay.textContent = `Treats: ${treatsCollected}/5`;
 
@@ -273,6 +272,8 @@ document.getElementById('backToStartButton').addEventListener('click', function(
   // Redirect to initial.html
   window.location.href = 'initial_page.html';  
 });
+
+
 
 
 
