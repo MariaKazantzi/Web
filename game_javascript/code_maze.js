@@ -92,7 +92,6 @@ function isPathAvailable(maze, start, end) {
   return false; // No path found
 }
 
-
 function findRandomEmptyCell(maze, player) {
   const emptyCells = [];
 
@@ -121,7 +120,6 @@ function findRandomEmptyCell(maze, player) {
   return null; // Return null if no valid cells are found
 }
 
-
 // Place the treat in a random empty cell
 let newTreat = findRandomEmptyCell(maze, player);
 if (newTreat) {
@@ -130,7 +128,6 @@ if (newTreat) {
 } else {
   console.error("No empty cell found for the treat.");
 }
-
 
 // Set player or treat position using CSS transform
 function setPosition(element, x, y) {
@@ -143,7 +140,6 @@ function setPosition(element, x, y) {
   element.style.left = `${mazeOffsetX + x * CELL_SIZE}px`;
   element.style.top = `${mazeOffsetY + y * CELL_SIZE}px`;
 }
-
 
 setPosition(playerDiv, player.x, player.y);
 setPosition(treatDiv, treat.x, treat.y);

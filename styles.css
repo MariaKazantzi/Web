@@ -211,33 +211,33 @@ cursor: pointer;
 .cell {
     width: 100%; /* Automatically adapts to the grid cell size */
     height: 100%;
-  }
+}
 
 .wall {
-background-color: black;
+    background-color: black;
 }
 
 .path {
     background-color: white;
-  }
+}
   
 #player {
-width: 50px; /* Matches CELL_SIZE */
-height: 50px; /* Matches CELL_SIZE */
-position: absolute; /* Ensures movement inside the maze */
-transition: transform 0.2s; /* Smooth movement */
-background-image: url('./images/maze/nugget.png');
-background-size: cover; /* Ensure the image scales correctly */
-background-position: center;
+    width: 50px; /* Matches CELL_SIZE */
+    height: 50px; /* Matches CELL_SIZE */
+    position: absolute; /* Ensures movement inside the maze */
+    transition: transform 0.2s; /* Smooth movement */
+    background-image: url('./images/maze/nugget.png');
+    background-size: cover; /* Ensure the image scales correctly */
+    background-position: center;
 }
 
 #treat {
-width: 50px;
-height: 50px;
-position: absolute; /* Allows movement */
-transition: transform 0.2s; /* Smooth movement */
-background-image: url('./images/maze/treats.png');
-background-size: cover; /* Ensures the image fits the element */
-background-position: center;
+    width: 50px;
+    height: 50px;
+    position: absolute; /* Allows movement */
+    transition: transform 0.2s; /* Smooth movement */
+    background-image: url('./images/maze/treats.png');
+    background-size: cover; /* Ensures the image fits the element */
+    background-position: center;
 }
 
